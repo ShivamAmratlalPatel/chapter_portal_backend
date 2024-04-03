@@ -34,11 +34,11 @@ jobs:
       run: |
         docker-compose build
         docker-compose up -d
-        docker exec nhsf-backend isort --profile black .
-        docker exec nhsf-backend black --check .
-        docker exec nhsf-backend ruff check .
-        docker exec -t nhsf-backend sh ./scripts/migrate.sh
-        docker exec nhsf-backend pytest --cov --cov-report term --cov-report xml:coverage.xml --junitxml=junit/report.xml
+        docker exec chapter-backend isort --profile black .
+        docker exec chapter-backend black --check .
+        docker exec chapter-backend ruff check .
+        docker exec -t chapter-backend sh ./scripts/migrate.sh
+        docker exec chapter-backend pytest --cov --cov-report term --cov-report xml:coverage.xml --junitxml=junit/report.xml
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v3

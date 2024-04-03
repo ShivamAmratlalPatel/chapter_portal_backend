@@ -2,9 +2,9 @@
 
 cd $(pwd) || exit
 
-if docker ps --format "{{.Names}}" | grep nhsf-backend; then
+if docker ps --format "{{.Names}}" | grep chapter-backend; then
   echo "found a docker"
-  TEST_CONTAINER_ENV=$(docker ps --format "{{.Names}}" | grep nhsf-backend)
+  TEST_CONTAINER_ENV=$(docker ps --format "{{.Names}}" | grep chapter-backend)
   echo "]${TEST_CONTAINER_ENV}["
 else
   TEST_CONTAINER_ENV=""
