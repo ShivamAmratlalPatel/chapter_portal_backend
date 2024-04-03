@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/chapter_portal_backend.iml" filepath="$PROJECT_DIR$/.idea/chapter_portal_backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/nhsf-sports-competition-backend.iml" filepath="$PROJECT_DIR$/.idea/nhsf-sports-competition-backend.iml" />
     </modules>
   </component>
 </project>

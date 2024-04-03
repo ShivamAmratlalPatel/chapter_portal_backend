@@ -1,0 +1,53 @@
+name: Backend Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+
+    - name: Install Docker Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
+    - name: Build, Run Docker Compose and Run tests
+      run: |
+        docker-compose build
+        docker-compose up -d
+        docker exec nhsf-backend isort --profile black .
+        docker exec nhsf-backend black --check .
+        docker exec nhsf-backend ruff check .
+        docker exec -t nhsf-backend sh ./scripts/migrate.sh
+        docker exec nhsf-backend pytest --cov --cov-report term --cov-report xml:coverage.xml --junitxml=junit/report.xml
+
+    - name: Upload pytest test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: pytest-results
+        path: junit/report.xml
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage
+        path: /coverage.xml

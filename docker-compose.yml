@@ -1,0 +1,34 @@
+#file: noinspection SpellCheckingInspection
+version: "3.8"
+services:
+  backend:
+    build: .
+    container_name: nhsf-backend
+    env_file:
+      - $PWD/.env.local
+    depends_on:
+      - postgres
+    ports:
+      - "9000:9000"
+    volumes:
+      - type: bind
+        source: $PWD
+        target: /app
+  postgres:
+    image: postgres:11-alpine
+    container_name: nhsf-db
+    hostname: nhsf-db
+    environment:
+      POSTGRES_DB: nhsf_backend
+      POSTGRES_USER: rc
+      POSTGRES_PASSWORD: ""
+      POSTGRES_HOST_AUTH_METHOD: trust
+  pg_admin:
+    image: dpage/pgadmin4
+    container_name: rc_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: a@b.com
+      PGADMIN_DEFAULT_PASSWORD: dev
+      PGADMIN_LISTEN_PORT: 4000
+    ports:
+      - "4001:4000"
