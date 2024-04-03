@@ -1,9 +1,9 @@
 #file: noinspection SpellCheckingInspection
 version: "3.8"
 services:
-  backend:
+  chapter-backend:
     build: .
-    container_name: nhsf-backend
+    container_name: chapter-backend
     env_file:
       - $PWD/.env.local
     depends_on:
@@ -16,19 +16,10 @@ services:
         target: /app
   postgres:
     image: postgres:11-alpine
-    container_name: nhsf-db
-    hostname: nhsf-db
+    container_name: chapter-db
+    hostname: chapter-db
     environment:
-      POSTGRES_DB: nhsf_backend
-      POSTGRES_USER: rc
+      POSTGRES_DB: chapter_backend
+      POSTGRES_USER: chapter
       POSTGRES_PASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: trust
-  pg_admin:
-    image: dpage/pgadmin4
-    container_name: rc_pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: a@b.com
-      PGADMIN_DEFAULT_PASSWORD: dev
-      PGADMIN_LISTEN_PORT: 4000
-    ports:
-      - "4001:4000"

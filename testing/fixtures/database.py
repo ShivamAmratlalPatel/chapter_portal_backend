@@ -15,7 +15,7 @@ def session_factory() -> session_local_factory:
     """Create a session factory for a local database."""
     # Migrate the database if it's not up to date.
     database_url = os.environ["DATABASE_URL"]
-    if database_url != "postgresql://rc@nhsf-db/nhsf_backend":  # pragma: no cover
+    if database_url != "postgresql://chapter@chapter-db/chapter_backend":  # pragma: no cover
         sys.exit(1)
     alembic_config = AlembicConfig("alembic.ini")
     alembic_config.set_main_option("sqlalchemy.url", database_url)

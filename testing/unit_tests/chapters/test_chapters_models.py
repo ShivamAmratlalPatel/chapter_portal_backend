@@ -4,8 +4,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from backend.chapters.chapters_models import Chapter
-from backend.sports.sports_models import Sport
-from backend.teams.teams_models import Team
 from testing.fixtures.database import session, session_factory  # noqa: F401
 from testing.helpers.fake_data import fake_chapter, fake_sport, fake_team
 
@@ -54,30 +52,3 @@ class TestChapter:
         deleted_chapter = session.get(Chapter, chapter.id)
         assert deleted_chapter.is_deleted is True
 
-    def test_teams_relationship(self: "TestChapter", session: Session) -> None:
-        """Test teams relationship."""
-        chapter_data = fake_chapter()
-        chapter = Chapter(**chapter_data)
-        session.add(chapter)
-        session.commit()
-
-        assert chapter.teams == []
-
-        sport_data = fake_sport()
-
-        sport = Sport(**sport_data)
-        session.add(sport)
-        session.commit()
-
-        assert sport.teams == []
-
-        team_data = fake_team(chapter_id=chapter.id, sport_id=sport.id)
-        team = Team(**team_data)
-
-        session.add(team)
-        session.commit()
-
-        session.refresh(chapter)
-        session.refresh(sport)
-
-        assert chapter.teams == [team]

@@ -5,7 +5,6 @@ from uuid import UUID
 from faker import Faker
 
 from backend.schemas import Address
-from backend.stages.stages_schemas import StagesEnum
 
 fake = Faker(locale="en_GB")
 
@@ -146,18 +145,3 @@ def fake_pitch() -> dict:
     }
 
 
-def fake_match(
-    home_team_id: UUID,
-    away_team_id: UUID,
-    sport_id: UUID,
-    pitch_id: UUID,
-    stage: StagesEnum,
-) -> dict:
-    """Return a fake match"""
-    return {
-        "home_team_id": home_team_id,
-        "away_team_id": away_team_id,
-        "sport_id": sport_id,
-        "pitch_id": pitch_id,
-        "stage_id": stage.value,
-    }

@@ -1,5 +1,5 @@
-"""Chapter Database Models"""
-from sqlalchemy import Boolean, Column, DateTime, String, func
+"""Membership Database Models"""
+from sqlalchemy import Boolean, Column, DateTime, func, ForeignKey, Integer
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship
 
@@ -7,10 +7,9 @@ from backend.database import Base
 from backend.utils import datetime_now, generate_uuid
 
 
-class Chapter(Base):
-    """Chapter database model."""
+class MembershipLog(Base):
 
-    __tablename__ = "chapters"
+    __tablename__ = "membership_logs"
 
     id = Column(
         pg.UUID(as_uuid=True),
@@ -19,9 +18,11 @@ class Chapter(Base):
         default=generate_uuid(),
         server_default=func.uuid_generate_v4(),
     )
-    name = Column(String, nullable=False)
-    zone = Column(String, nullable=False)
-    email = Column(String, nullable=False, unique=True)
+    chapter_id = Column(
+        pg.UUID(as_uuid=True),
+        ForeignKey("chapters.id"),
+        nullable=False,
+    )
     created_date = Column(
         DateTime(timezone=True),
         nullable=False,
@@ -40,3 +41,8 @@ class Chapter(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
+    number_of_members = Column(Integer, nullable=False)
+    log_date = Column(DateTime(timezone=True), nullable=False)
+
+    chapter = relationship("Chapter", back_populates="membership_logs")
+
