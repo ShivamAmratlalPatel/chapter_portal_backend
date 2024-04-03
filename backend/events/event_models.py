@@ -1,5 +1,5 @@
 """Event Database Models"""
-from sqlalchemy import Boolean, Column, DateTime, String, func, ForeignKey
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, func
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship
 

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from backend.chapters.chapters_models import Chapter
 from testing.fixtures.database import session, session_factory  # noqa: F401
-from testing.helpers.fake_data import fake_chapter, fake_sport, fake_team
+from testing.helpers.fake_data import fake_chapter
 
 
 class TestChapter:
@@ -51,4 +51,3 @@ class TestChapter:
 
         deleted_chapter = session.get(Chapter, chapter.id)
         assert deleted_chapter.is_deleted is True
-

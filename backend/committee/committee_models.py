@@ -1,5 +1,5 @@
 """Committee Database Models"""
-from sqlalchemy import Boolean, Column, DateTime, String, func, ForeignKey, Date
+from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, String, func
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship
 
@@ -56,7 +56,7 @@ class CommitteeMember(Base):
         """
         Check if the committee member is current.
 
-        Returns:
+        Returns
             bool: True if the committee member is current, False otherwise.
 
         """
@@ -67,7 +67,7 @@ class CommitteeMember(Base):
         """
         Check if the committee member is past.
 
-        Returns:
+        Returns
             bool: True if the committee member is past, False otherwise.
 
         """
@@ -78,7 +78,7 @@ class CommitteeMember(Base):
         """
         Check if the committee member is upcoming.
 
-        Returns:
+        Returns
             bool: True if the committee member is upcoming, False otherwise.
 
         """

@@ -1,7 +1,6 @@
 """Chapter Database Models"""
 from sqlalchemy import Boolean, Column, DateTime, String, func
 from sqlalchemy.dialects import postgresql as pg
-from sqlalchemy.orm import relationship
 
 from backend.database import Base
 from backend.utils import datetime_now, generate_uuid

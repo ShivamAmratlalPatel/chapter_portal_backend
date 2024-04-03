@@ -1,5 +1,5 @@
 """Membership Database Models"""
-from sqlalchemy import Boolean, Column, DateTime, func, ForeignKey, Integer
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, func
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship
 
@@ -8,6 +8,7 @@ from backend.utils import datetime_now, generate_uuid
 
 
 class MembershipLog(Base):
+    """Membership Logs table."""
 
     __tablename__ = "membership_logs"
 
@@ -45,4 +46,3 @@ class MembershipLog(Base):
     log_date = Column(DateTime(timezone=True), nullable=False)
 
     chapter = relationship("Chapter", back_populates="membership_logs")
-

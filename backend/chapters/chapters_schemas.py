@@ -18,6 +18,8 @@ class ZoneEnum(str, Enum):
     north = "North"
     central = "Central"
 
+    __slots__ = ()
+
 
 class ChapterBase(BaseModel):
     """Chapter base schema."""

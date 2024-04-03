@@ -143,5 +143,3 @@ def fake_pitch() -> dict:
     return {
         "name": fake_name(),
     }
-
-

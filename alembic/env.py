@@ -5,8 +5,6 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
-
-from backend.chapters.chapters_models import Chapter
 from backend.database import Base
 
 # this is the Alembic Config object, which provides
