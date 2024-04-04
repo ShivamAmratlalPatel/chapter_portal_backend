@@ -5,7 +5,15 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
+from backend.chapters.chapters_models import Chapter  # noqa: F401
+from backend.committees.committee_models import CommitteeMember  # noqa: F401
 from backend.database import Base
+from backend.events.event_models import (  # noqa: F401
+    ChapterEventAssociation,
+    Event,
+    EventType,
+)
+from backend.membership.membership_models import MembershipLog  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

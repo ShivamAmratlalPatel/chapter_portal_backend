@@ -60,7 +60,10 @@ class CommitteeMember(Base):
             bool: True if the committee member is current, False otherwise.
 
         """
-        return self.conclusion_date is None
+        return (
+            self.conclusion_date is None
+            and self.commencement_date <= datetime_now().date()
+        )
 
     @property
     def is_past(self: "CommitteeMember") -> bool:
@@ -71,7 +74,10 @@ class CommitteeMember(Base):
             bool: True if the committee member is past, False otherwise.
 
         """
-        return not self.is_current
+        return (
+            self.conclusion_date is not None
+            and self.conclusion_date < datetime_now().date()
+        )
 
     @property
     def is_upcoming(self: "CommitteeMember") -> bool:

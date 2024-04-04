@@ -1,1 +1,1 @@
-PYTHONPATH=. alembic revision --autogenerate -m "add comms table"
+PYTHONPATH=. alembic revision --autogenerate -m "$*"

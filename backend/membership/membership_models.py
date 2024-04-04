@@ -45,4 +45,4 @@ class MembershipLog(Base):
     number_of_members = Column(Integer, nullable=False)
     log_date = Column(DateTime(timezone=True), nullable=False)
 
-    chapter = relationship("Chapter", back_populates="membership_logs")
+    chapter = relationship("Chapter")
