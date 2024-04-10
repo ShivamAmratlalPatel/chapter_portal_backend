@@ -121,3 +121,30 @@ def trace(n: int = 10, filter_: str = ".*", v: bool = False) -> str:
                 lines.append(line)
             lines.append("")
         return "\n".join(lines)
+
+
+@app.get("/migrate_db", response_class=PlainTextResponse)
+def migrate_db() -> str:
+    """
+    Migrate the database.
+
+    Returns
+        str: migration output
+    """
+    from alembic import command
+    from alembic.config import Config
+
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")
+    return "Database migrated!"
+
+
+@app.get("/generate_migrations", response_class=PlainTextResponse)
+def generate_migrations() -> str:
+    """Generate new migrations"""
+    from alembic import command
+    from alembic.config import Config
+
+    alembic_cfg = Config("alembic.ini")
+    command.revision(alembic_cfg, "head", autogenerate=True)
+    return "Migrations generated!"
