@@ -1,0 +1,15 @@
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (3, 'NHSF (UK) Relationship', 1, '2024-04-10 01:22:31.243597 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (1, 'Committee Relationships', 1, '2024-04-08 14:50:20.721958 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (4, 'Financial Planning', 2, '2024-04-10 01:26:07.630183 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (2, 'SU Relationships', 1, '2024-04-10 01:22:18.572606 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (5, 'Income Generation', 2, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (6, 'SU Relationships', 2, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (7, 'Interaction with other societies/chapters', 3, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (8, 'Engagement with zonal/national events', 3, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (9, 'Relationships with suppliers/vendors', 3, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (10, 'Social Media Performance', 4, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (11, 'Interaction with NHSF (UK)', 4, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (12, 'Social Media Outreach', 4, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (13, 'Aarti & Learning Sessions', 5, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (14, 'Sewa Intiatives', 5, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (15, 'Collaborations with Samaj', 5, '2024-04-10 01:30:23.775051 +00:00', false, null);

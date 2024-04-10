@@ -1,0 +1,6 @@
+INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('5e779d5a-220d-4ce1-90d5-1309ab8b8971', 'Imperial', 'London', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
+INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('503130f2-de91-4e32-9978-4a8e28925936', 'KCL', 'London', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
+INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('92bb9fb3-cb61-4c77-98e7-2fb516ae0258', 'LSE', 'London', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
+INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('d10c1516-338e-4d8e-bf3e-e02b6376bd5a', 'QM', 'London', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
+INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('ebbd8d56-cad1-470e-8215-d798425d97b5', 'Manchester', 'North', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
+INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('5e846e59-ed29-444d-a9e0-e4301b30a0ce', 'Nottingham', 'Central', null, '2024-04-07 15:52:48.372440 +00:00', false, null);

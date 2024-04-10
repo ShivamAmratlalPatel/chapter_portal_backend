@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
+from fastapi.responses import JSONResponse
 
 from backend.health.health_models import ChapterHealth, HealthQuestion, Section
 from backend.helpers import get_db
@@ -180,7 +181,7 @@ def update_chapter_health(
 
 
 @health_router.get("/sections", tags=["sections"])
-def get_sections(db: Session = db_session) -> list[Section]:
+def get_sections(db: Session = db_session) -> JSONResponse:
     """
     Get the sections
 
@@ -198,7 +199,10 @@ def get_sections(db: Session = db_session) -> list[Section]:
         .all()
     )
 
-    return sections
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=[{"id": section.id, "name": section.name} for section in sections],
+    )
 
 
 @health_router.get("/questions/section/{section_id}", tags=["questions"])
