@@ -25,8 +25,8 @@ class ChapterBase(BaseModel):
     """Chapter base schema."""
 
     name: str
-    email: EmailStr
-    zone: ZoneEnum
+    email: EmailStr | None = None
+    zone: ZoneEnum | None = None
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -54,8 +54,8 @@ class ChapterUpdate(BaseModel):
     """Chapter update schema."""
 
     name: str
-    email: EmailStr
-    zone: ZoneEnum
+    email: EmailStr | None = None
+    zone: ZoneEnum | None = None
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -71,6 +71,7 @@ class ChapterRead(ChapterBase):
     """Chapter read schema."""
 
     id: UUID
+    zone: str | None = None
     created_date: datetime
     last_modified_date: datetime | None = None
     is_deleted: bool
@@ -85,4 +86,16 @@ class ChapterRead(ChapterBase):
                 "is_deleted": False,
             },
         },
+    )
+
+
+class ChapterSidebar(BaseModel):
+    """Chapter sidebar schema."""
+
+    label: str
+    icon: str = "pi pi-fw pi-id-card"
+    to: str
+
+    model_config = ConfigDict(
+        from_attributes=True,
     )

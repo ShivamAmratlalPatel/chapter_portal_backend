@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 from backend.chapters.chapters_routes import chapters_router
 
 from .config import CORS_ORIGINS
+from .health.health_routes import health_router
 from .middleware import ContentSizeLimitMiddleware
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "WARNING").upper()
@@ -60,6 +61,7 @@ app.add_middleware(
 app.add_middleware(ContentSizeLimitMiddleware, max_content_size=10_000_000)
 
 app.include_router(chapters_router)
+app.include_router(health_router)
 
 
 @app.get(

@@ -19,8 +19,8 @@ class Chapter(Base):
         server_default=func.uuid_generate_v4(),
     )
     name = Column(String, nullable=False)
-    zone = Column(String, nullable=False)
-    email = Column(String, nullable=False, unique=True)
+    zone = Column(String)
+    email = Column(String, nullable=True)
     created_date = Column(
         DateTime(timezone=True),
         nullable=False,
@@ -30,7 +30,7 @@ class Chapter(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
-    is_deleted = Column(Boolean, nullable=False, default=False)
+    is_deleted = Column(Boolean, nullable=False, default=False, server_default="false")
     last_modified_date = Column(
         DateTime(timezone=True),
         onupdate=datetime_now(),
@@ -39,3 +39,8 @@ class Chapter(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
+
+    @property
+    def to(self: "Chapter") -> str:
+        """Return the chapter's URL path."""
+        return f"/health/{self.id}"

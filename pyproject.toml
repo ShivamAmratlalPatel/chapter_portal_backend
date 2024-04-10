@@ -20,6 +20,7 @@ boto3 = "^1.28.3"
 rsa = "^4.9"
 requests = "^2.31.0"
 pem = "^23.1.0"
+sqlakeyset = "^2.0.1706067133"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7"

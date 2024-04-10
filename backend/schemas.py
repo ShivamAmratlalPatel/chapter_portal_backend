@@ -1,6 +1,9 @@
 """Schemas for the backend."""
 import re
-from typing import Annotated
+from datetime import date, datetime
+from enum import Enum
+from typing import Annotated, Any
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, StringConstraints, field_validator
 
@@ -128,3 +131,33 @@ class Address(BaseModel):
         return value
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SortBy(str, Enum):
+    """SortBy enumeration."""
+
+    date_asc = "date_asc"
+    date_desc = "date_desc"
+    a_z_asc = "a_z_asc"
+    a_z_desc = "a_z_desc"
+    action_required = "action_required"
+    move_in_asc = "move_in_asc"
+    move_in_desc = "move_in_desc"
+
+    __slots__ = ()
+
+
+class NextPage(BaseModel):
+    """NextPage schema."""
+
+    previous: bool
+    cursor_column: datetime | date | str
+    cursor_id: UUID
+
+
+class PaginationResult(BaseModel):
+    """PaginationResult schema."""
+
+    next: NextPage | None
+    previous: NextPage | None
+    results: list[Any]

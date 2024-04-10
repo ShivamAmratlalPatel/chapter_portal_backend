@@ -1,4 +1,6 @@
-"""Ednpoints for chapters"""
+"""Endpoints for chapters"""
+from datetime import datetime
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -9,8 +11,13 @@ from starlette import status
 
 from backend.chapters.chapters_models import Chapter
 from backend.chapters.chapters_schemas import ChapterCreate, ChapterRead, ChapterUpdate
+from backend.commands.get_paginated_result import GetPaginatedResult
 from backend.helpers import get_db
-from backend.utils import object_to_dict
+from backend.schemas import PaginationResult, SortBy
+from backend.utils import convert_list_to_list, object_to_dict
+
+if TYPE_CHECKING:
+    from sqlalchemy import Row
 
 chapters_router = APIRouter()
 
@@ -97,42 +104,46 @@ def get_chapter(
     )
 
 
-@chapters_router.get(
-    "/chapters",
-    tags=["chapters"],
-    description="Get chapters.",
-    responses={
-        status.HTTP_200_OK: {
-            "model": list[ChapterRead],
-            "description": "Successful response: chapters found",
-            "title": "Chapter details",
-        },
-        status.HTTP_404_NOT_FOUND: {
-            "description": "Chapters not found",
-            "title": "Chapters not found",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "Chapters not found"},
-                },
-            },
-        },
-    },
-)
-def get_chapters(
+@chapters_router.get("/chapters", tags=["chapters"])
+def list_chapters(  # noqa: PLR0913
+    cursor_column: datetime | str | None = None,
+    cursor_id: UUID | None = None,
+    previous: bool | None = None,
+    per_page: int | None = 20,
+    filter_by: str | None = None,
+    sort_by: SortBy | None = SortBy.date_asc,
     db: Session = db_session,
-) -> JSONResponse:
+) -> PaginationResult:
     """Get all chapters."""
-    chapters = db.query(Chapter).all()
-    if not chapters:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Chapters not found",
+    pagination = GetPaginatedResult()
+
+    filters = []
+
+    if filter_by is not None and filter_by != "":
+        filters.append(
+            Chapter.name.ilike(f"%{filter_by}%"),
         )
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content=[
-            object_to_dict(ChapterRead.model_validate(chapter)) for chapter in chapters
-        ],
+
+    query = (
+        db.query(Chapter)
+        .filter(*filters)
+        .filter(Chapter.is_deleted.is_(False))
+        .order_by(
+            pagination.get_sort_by(
+                Chapter.name,
+                Chapter.created_date,
+                sort_by,
+            ),
+            Chapter.id.desc(),
+        )
+    )
+    return pagination.run(
+        cursor_id,
+        cursor_column,
+        previous,
+        query,
+        ChapterRead,
+        per_page,
     )
 
 
@@ -216,3 +227,45 @@ def delete_chapter(
     db.commit()
 
     return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content={})
+
+
+@chapters_router.get(
+    "/all_chapters",
+    tags=["chapters"],
+    description="Get all chapters",
+)
+def list_all_chapters(
+    db: Session = db_session,
+) -> JSONResponse:
+    """Get all chapters."""
+    zones: list[Row] = (
+        db.query(Chapter.zone).filter(Chapter.is_deleted.is_(False)).distinct()
+    )
+
+    output = []
+    for zone in zones:
+        chapters: list[Chapter] = (
+            db.query(Chapter)
+            .filter(Chapter.is_deleted.is_(False))
+            .filter(Chapter.zone == zone[0])
+            .all()
+        )
+
+        output.append(
+            {
+                "label": zone[0],
+                "items": [
+                    {
+                        "label": chapter.name,
+                        "icon": "pi pi-fw pi-id-card",
+                        "to": f"/health/{chapter.id}",
+                    }
+                    for chapter in chapters
+                ],
+            },
+        )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=convert_list_to_list(output, False),
+    )

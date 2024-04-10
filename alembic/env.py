@@ -13,6 +13,11 @@ from backend.events.event_models import (  # noqa: F401
     Event,
     EventType,
 )
+from backend.health.health_models import (  # noqa: F401
+    ChapterHealth,
+    HealthQuestion,
+    Section,
+)
 from backend.membership.membership_models import MembershipLog  # noqa: F401
 
 # this is the Alembic Config object, which provides

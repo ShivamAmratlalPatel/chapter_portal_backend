@@ -4,6 +4,8 @@ services:
   chapter-backend:
     build: .
     container_name: chapter-backend
+    networks:
+      - nhsf_postgres_network
     env_file:
       - $PWD/.env.local
     depends_on:
@@ -17,9 +19,16 @@ services:
   postgres:
     image: postgres:11-alpine
     container_name: chapter-db
+    networks:
+      - nhsf_postgres_network
     hostname: chapter-db
     environment:
       POSTGRES_DB: chapter_backend
       POSTGRES_USER: chapter
       POSTGRES_PASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+
+networks:
+    nhsf_postgres_network:
