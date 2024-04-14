@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 from fastapi.responses import JSONResponse
 
+from backend.chapters.chapters_models import Chapter
 from backend.health.health_models import ChapterHealth, HealthQuestion, Section
 from backend.helpers import get_db
 from backend.utils import datetime_now, generate_uuid
@@ -115,6 +116,91 @@ def get_chapter_health_by_section(
     return periods
 
 
+@health_router.get(
+    "/health/zone/{zone}/year/{year}/month/{month}/section/{section_id}",
+    tags=["chapter_health"],
+)
+def get_chapter_health_by_section_and_period(
+    zone: str,
+    year: int,
+    month: int,
+    section_id: int,
+    db: Session = db_session,
+) -> JSONResponse:
+    """
+    Get the health scores for a chapter by section
+
+    Args:
+        zone (str): The zone
+        year (int): The year
+        month (int): The month
+        section_id (int): The section id
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        list[dict]: The health scores
+
+    """
+    chapters: list[Chapter] = (
+        db.query(Chapter)
+        .filter(Chapter.zone == zone)
+        .filter(Chapter.is_deleted.is_(False))
+        .order_by(Chapter.name)
+        .all()
+    )
+
+    output = []
+
+    questions = (
+        db.query(HealthQuestion)
+        .filter(HealthQuestion.section_id == section_id)
+        .filter(HealthQuestion.is_deleted.is_(False))
+        .all()
+    )
+
+    for chapter in chapters:
+        output_dict = {
+            "chapter": chapter.name,
+        }
+        for question in questions:
+            chapter_health: ChapterHealth = (
+                db.query(ChapterHealth)
+                .filter(ChapterHealth.chapter_id == chapter.id)
+                .filter(ChapterHealth.year == year)
+                .filter(ChapterHealth.month == month)
+                .filter(ChapterHealth.is_deleted.is_(False))
+                .filter(ChapterHealth.health_question_id == question.id)
+                .order_by(ChapterHealth.created_date.desc())
+                .first()
+            )
+
+            output_dict[question.id] = chapter_health.score if chapter_health else None
+
+        try:
+            output_dict["average"] = sum(
+                [
+                    output_dict[question.id]
+                    for question in questions
+                    if output_dict[question.id] is not None
+                ]
+            ) / len(
+                [
+                    question.id
+                    for question in questions
+                    if output_dict[question.id] is not None
+                ]
+            )
+        except ZeroDivisionError:
+            output_dict["average"] = None
+
+        output.append(output_dict)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=output,
+    )
+
+
 @health_router.put(
     "/health/{chapter_id}",
     tags=["chapter_health"],
@@ -201,7 +287,10 @@ def get_sections(db: Session = db_session) -> JSONResponse:
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content=[{"id": section.id, "name": section.name} for section in sections],
+        content=[
+            {"id": section.id, "name": section.name, "is_deleted": section.is_deleted}
+            for section in sections
+        ],
     )
 
 
@@ -233,3 +322,72 @@ def get_questions(section_id: int, db: Session = db_session) -> list[dict]:
         {"field": str(question.id), "header": question.question}
         for question in questions
     ]
+
+
+@health_router.get("/questions/section/{section_id}/section", tags=["questions"])
+def get_questions_by_section(section_id: int, db: Session = db_session) -> list[dict]:
+    """
+    Get the questions for a section
+
+    Args:
+        section_id (int): The section id
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        list[dict]: The questions
+
+    """
+    questions: list[HealthQuestion] = (
+        db.query(HealthQuestion)
+        .filter(HealthQuestion.is_deleted.is_(False))
+        .filter(HealthQuestion.section_id == section_id)
+        .order_by(HealthQuestion.id)
+        .all()
+    )
+
+    return (
+        [
+            {"field": "chapter", "header": "chapter"},
+        ]
+        + [
+            {"field": str(question.id), "header": question.question}
+            for question in questions
+        ]
+        + [
+            {
+                "field": "average",
+                "header": "average",
+            }
+        ]
+    )
+
+
+@health_router.get("/section/{section_id}", tags=["sections"])
+def get_section(section_id: int, db: Session = db_session) -> JSONResponse:
+    """
+    Get the section
+
+    Args:
+        section_id (int): The section id
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        list[Section]: The sections
+
+    """
+    section: Section = (
+        db.query(Section)
+        .filter(Section.id == section_id)
+        .filter(Section.is_deleted.is_(False))
+        .order_by(Section.id)
+        .first()
+    )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "id": section.id,
+            "name": section.name,
+            "is_deleted": section.is_deleted,
+        },
+    )

@@ -12,6 +12,7 @@ from starlette import status
 from backend.chapters.chapters_models import Chapter
 from backend.chapters.chapters_schemas import ChapterCreate, ChapterRead, ChapterUpdate
 from backend.commands.get_paginated_result import GetPaginatedResult
+from backend.health.health_models import Section
 from backend.helpers import get_db
 from backend.schemas import PaginationResult, SortBy
 from backend.utils import convert_list_to_list, object_to_dict
@@ -239,7 +240,11 @@ def list_all_chapters(
 ) -> JSONResponse:
     """Get all chapters."""
     zones: list[Row] = (
-        db.query(Chapter.zone).filter(Chapter.is_deleted.is_(False)).distinct()
+        db.query(Chapter.zone)
+        .filter(Chapter.is_deleted.is_(False))
+        .distinct()
+        .order_by(Chapter.zone)
+        .all()
     )
 
     output = []
@@ -265,7 +270,71 @@ def list_all_chapters(
             },
         )
 
+    teams_output = []
+
+    teams: list[Section] = (
+        db.query(Section)
+        .filter(Section.is_deleted.is_(False))
+        .order_by(Section.name)
+        .all()
+    )
+
+    for team in teams:
+        teams_output.append(
+            {
+                "label": team.name,
+                "icon": "pi pi-fw pi-id-card",
+                "to": f"/health/section/{team.id}",
+            },
+        )
+
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content=convert_list_to_list(output, False),
+        content=convert_list_to_list(
+            [
+                {
+                    "label": "Chapters",
+                    "icon": "pi pi-fw pi-id-card",
+                    "to": "/health",
+                    "items": output,
+                },
+                {
+                    "label": "Teams",
+                    "icon": "pi pi-fw pi-id-card",
+                    "to": "/health",
+                    "items": teams_output,
+                },
+            ],
+            False,
+        ),
+    )
+
+
+@chapters_router.get("/zones", tags=["zones"])
+def get_zones(db: Session = db_session) -> JSONResponse:
+    """
+    Get the zones
+
+    Args:
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        list[Zone]: The zones
+
+    """
+    zones: list[Row] = (
+        db.query(Chapter.zone)
+        .filter(Chapter.is_deleted.is_(False))
+        .distinct()
+        .order_by(Chapter.zone)
+        .all()
+    )
+
+    output = []
+
+    for index, zone in enumerate(zones):
+        output.append({"id": index, "name": zone[0], "is_deleted": False})
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=output,
     )
