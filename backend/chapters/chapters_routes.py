@@ -261,12 +261,20 @@ def list_all_chapters(
                 "label": zone[0],
                 "items": [
                     {
+                        "label": f"{zone[0]} Home",
+                        "icon": "pi pi-fw pi-home",
+                        "to": f"/health/zone/{zone[0]}",
+                    }
+                ]
+                + [
+                    {
                         "label": chapter.name,
                         "icon": "pi pi-fw pi-id-card",
                         "to": f"/health/{chapter.id}",
                     }
                     for chapter in chapters
                 ],
+                "to": f"/health/zone/{zone[0]}",
             },
         )
 
