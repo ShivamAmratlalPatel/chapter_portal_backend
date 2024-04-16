@@ -1,7 +1,7 @@
-INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (3, 'NHSF (UK) Relationship', 1, '2024-04-10 01:22:31.243597 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (1, 'Committee Relationships', 1, '2024-04-08 14:50:20.721958 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (4, 'Financial Planning', 2, '2024-04-10 01:26:07.630183 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (2, 'SU Relationships', 1, '2024-04-10 01:22:18.572606 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (3, 'NHSF (UK) Relationship', 1, '2024-04-10 01:22:31.243597 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (4, 'Financial Planning', 2, '2024-04-10 01:26:07.630183 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (5, 'Income Generation', 2, '2024-04-10 01:30:23.775051 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (6, 'SU Relationships', 2, '2024-04-10 01:30:23.775051 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (7, 'Interaction with other societies/chapters', 3, '2024-04-10 01:30:23.775051 +00:00', false, null);
@@ -13,3 +13,8 @@ INSERT INTO public.health_questions (id, question, section_id, created_date, is_
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (13, 'Aarti & Learning Sessions', 5, '2024-04-10 01:30:23.775051 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (14, 'Sewa Intiatives', 5, '2024-04-10 01:30:23.775051 +00:00', false, null);
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (15, 'Collaborations with Samaj', 5, '2024-04-10 01:30:23.775051 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (16, 'Campus Comments', 1, '2024-04-16 23:50:53.821537 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (17, 'Finance comments', 2, '2024-04-16 23:50:53.821537 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (18, 'Events Comments', 3, '2024-04-16 23:50:53.821537 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (19, 'Sampark Comments', 4, '2024-04-16 23:50:53.821537 +00:00', false, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date) VALUES (20, 'Sanskaar Comments', 5, '2024-04-16 23:50:53.821537 +00:00', false, null);
