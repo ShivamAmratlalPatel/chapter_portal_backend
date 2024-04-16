@@ -391,3 +391,76 @@ def get_section(section_id: int, db: Session = db_session) -> JSONResponse:
             "is_deleted": section.is_deleted,
         },
     )
+
+
+@health_router.get(
+    "/health/{chapter_id}/year/{year}/month/{month}/average", tags=["chapter_health"]
+)
+def get_average_chapter_health(
+    chapter_id: UUID,
+    year: int,
+    month: int,
+    db: Session = db_session,
+) -> JSONResponse:
+    """
+    Get the average health score for a chapter in a given month and year
+
+    Args:
+        chapter_id (UUID): The chapter id
+        year (int): The year
+        month (int): The month
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        int: The health score
+
+    """
+    sections: list[Section] = (
+        db.query(Section)
+        .filter(Section.is_deleted.is_(False))
+        .order_by(Section.id)
+        .all()
+    )
+
+    output = []
+
+    for section in sections:
+        sum_average = 0
+        sum_count = 0
+
+        questions: list[HealthQuestion] = (
+            db.query(HealthQuestion)
+            .filter(HealthQuestion.section_id == section.id)
+            .filter(HealthQuestion.is_deleted.is_(False))
+            .all()
+        )
+
+        for question in questions:
+            chapter_health: ChapterHealth = (
+                db.query(ChapterHealth)
+                .filter(ChapterHealth.chapter_id == chapter_id)
+                .filter(ChapterHealth.year == year)
+                .filter(ChapterHealth.month == month)
+                .filter(ChapterHealth.is_deleted.is_(False))
+                .filter(ChapterHealth.health_question_id == question.id)
+                .order_by(ChapterHealth.created_date.desc())
+                .first()
+            )
+
+            if chapter_health:
+                sum_average += (
+                    chapter_health.score if chapter_health.score is not None else 0
+                )
+                sum_count += 1
+
+        try:
+            average = sum_average / sum_count
+        except ZeroDivisionError:
+            average = None
+
+        output.append(average)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=output,
+    )

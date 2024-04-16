@@ -346,3 +346,45 @@ def get_zones(db: Session = db_session) -> JSONResponse:
         status_code=status.HTTP_200_OK,
         content=output,
     )
+
+
+@chapters_router.get("/chapters/{zone}", tags=["chapters"])
+def get_chapters_by_zone(
+    zone: str,
+    db: Session = db_session,
+) -> JSONResponse:
+    """
+    Get the chapters by zone
+
+    Args:
+        zone (str): The zone
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        list[Chapter]: The chapters
+
+    """
+    chapters: list[Chapter] = (
+        db.query(Chapter)
+        .filter(Chapter.is_deleted.is_(False))
+        .filter(Chapter.zone == zone)
+        .order_by(Chapter.name)
+        .all()
+    )
+
+    output = []
+
+    for chapter in chapters:
+        output.append(
+            {
+                "id": str(chapter.id),
+                "name": chapter.name,
+                "zone": chapter.zone,
+                "is_deleted": False,
+            },
+        )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=output,
+    )
