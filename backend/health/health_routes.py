@@ -111,7 +111,13 @@ def get_chapter_health_by_section(
                 .order_by(ChapterHealth.created_date.desc())
             ).first()
 
-            period[question.id] = chapter_health.score if chapter_health else None
+            period[question.id] = (
+                chapter_health.score
+                if chapter_health and chapter_health.score is not None
+                else chapter_health.comments
+                if chapter_health and chapter_health.comments
+                else None
+            )
 
     return periods
 
@@ -250,7 +256,11 @@ def update_chapter_health(
         ).first()
 
         if chapter_health:
-            chapter_health.score = int(score)
+            # check if score is a string representation of an integer
+            if isinstance(score, int) or score.isdigit():
+                chapter_health.score = int(score)
+            else:
+                chapter_health.comments = score
             chapter_health.last_modified_date = datetime_now()
         else:
             chapter_health = ChapterHealth(
@@ -259,7 +269,8 @@ def update_chapter_health(
                 year=year,
                 month=month,
                 health_question_id=db_question.id,
-                score=score,
+                score=score if score.isdigit() else None,
+                comments=score if not score.isdigit() else None,
             )
 
         db.add(chapter_health)
@@ -459,6 +470,73 @@ def get_average_chapter_health(
             average = None
 
         output.append(average)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=output,
+    )
+
+
+@health_router.get(
+    "/health/{chapter_id}/year/{year}/month/{month}/comments", tags=["chapter_health"]
+)
+def get_comments_chapter_health(
+    chapter_id: UUID,
+    year: int,
+    month: int,
+    db: Session = db_session,
+) -> JSONResponse:
+    """
+    Get the comments health score for a chapter in a given month and year
+
+    Args:
+        chapter_id (UUID): The chapter id
+        year (int): The year
+        month (int): The month
+        db (Session, optional): The database session. Defaults to db_session.
+
+    Returns:
+        JSONResponse: The health comments
+    """
+    sections: list[Section] = (
+        db.query(Section)
+        .filter(Section.is_deleted.is_(False))
+        .order_by(Section.id)
+        .all()
+    )
+
+    output = []
+
+    for section in sections:
+        questions: list[HealthQuestion] = (
+            db.query(HealthQuestion)
+            .filter(HealthQuestion.section_id == section.id)
+            .filter(HealthQuestion.is_deleted.is_(False))
+            .filter(HealthQuestion.question.ilike("%Comments%"))
+            .all()
+        )
+
+        for question in questions:
+            chapter_health: ChapterHealth = (
+                db.query(ChapterHealth)
+                .filter(ChapterHealth.chapter_id == chapter_id)
+                .filter(ChapterHealth.year == year)
+                .filter(ChapterHealth.month == month)
+                .filter(ChapterHealth.is_deleted.is_(False))
+                .filter(ChapterHealth.health_question_id == question.id)
+                .order_by(ChapterHealth.created_date.desc())
+                .first()
+            )
+
+            if chapter_health:
+                output.append(
+                    {
+                        "section": section.name,
+                        "comment": chapter_health.comments
+                        if chapter_health.comments
+                        else None,
+                    }
+                )
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
