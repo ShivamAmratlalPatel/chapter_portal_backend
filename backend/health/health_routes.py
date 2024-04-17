@@ -166,6 +166,7 @@ def get_chapter_health_by_section_and_period(
 
     for chapter in chapters:
         output_dict = {
+            "chapter_id": str(chapter.id),
             "chapter": chapter.name,
         }
         for question in questions:
@@ -180,7 +181,13 @@ def get_chapter_health_by_section_and_period(
                 .first()
             )
 
-            output_dict[question.id] = chapter_health.score if chapter_health else None
+            output_dict[question.id] = (
+                chapter_health.score
+                if chapter_health and chapter_health.score is not None
+                else chapter_health.comments
+                if chapter_health and chapter_health.comments
+                else None
+            )
 
         try:
             output_dict["average"] = sum(
@@ -188,12 +195,14 @@ def get_chapter_health_by_section_and_period(
                     output_dict[question.id]
                     for question in questions
                     if output_dict[question.id] is not None
+                    and isinstance(output_dict[question.id], int)
                 ]
             ) / len(
                 [
                     question.id
                     for question in questions
                     if output_dict[question.id] is not None
+                    and isinstance(output_dict[question.id], int)
                 ]
             )
         except ZeroDivisionError:
