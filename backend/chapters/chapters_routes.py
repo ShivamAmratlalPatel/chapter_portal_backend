@@ -253,6 +253,7 @@ def list_all_chapters(
             db.query(Chapter)
             .filter(Chapter.is_deleted.is_(False))
             .filter(Chapter.zone == zone[0])
+            .order_by(Chapter.name)
             .all()
         )
 
