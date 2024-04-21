@@ -1,1 +1,1 @@
-PYTHONPATH=. alembic revision --autogenerate -m "added is deleted to sections table"
+PYTHONPATH=. alembic revision --autogenerate -m "removed username from users table"
