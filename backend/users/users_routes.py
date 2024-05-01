@@ -105,7 +105,7 @@ def post_user_chapter(
     user_already_exists = (
         db.query(User)
         .filter(
-            User.username == user_create.username,
+            User.email == user_create.email,
         )
         .first()
     )

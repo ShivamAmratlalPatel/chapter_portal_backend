@@ -264,18 +264,18 @@ def list_all_chapters(
                     {
                         "label": f"{zone[0]} Home",
                         "icon": "pi pi-fw pi-home",
-                        "to": f"/health/zone/{zone[0]}",
+                        "to": f"/internal/health/zone/{zone[0]}",
                     }
                 ]
                 + [
                     {
                         "label": chapter.name,
                         "icon": "pi pi-fw pi-id-card",
-                        "to": f"/health/{chapter.id}",
+                        "to": f"/internal/health/{chapter.id}",
                     }
                     for chapter in chapters
                 ],
-                "to": f"/health/zone/{zone[0]}",
+                "to": f"/internal/health/zone/{zone[0]}",
             },
         )
 
@@ -293,7 +293,7 @@ def list_all_chapters(
             {
                 "label": team.name,
                 "icon": "pi pi-fw pi-id-card",
-                "to": f"/health/section/{team.id}",
+                "to": f"/internal/health/section/{team.id}",
             },
         )
 
