@@ -190,20 +190,24 @@ def get_chapter_health_by_section_and_period(
             )
 
         try:
-            output_dict["average"] = sum(
-                [
-                    output_dict[question.id]
-                    for question in questions
-                    if output_dict[question.id] is not None
-                    and isinstance(output_dict[question.id], int)
-                ]
-            ) / len(
-                [
-                    question.id
-                    for question in questions
-                    if output_dict[question.id] is not None
-                    and isinstance(output_dict[question.id], int)
-                ]
+            output_dict["average"] = round(
+                sum(
+                    [
+                        output_dict[question.id]
+                        for question in questions
+                        if output_dict[question.id] is not None
+                        and isinstance(output_dict[question.id], int)
+                    ]
+                )
+                / len(
+                    [
+                        question.id
+                        for question in questions
+                        if output_dict[question.id] is not None
+                        and isinstance(output_dict[question.id], int)
+                    ]
+                ),
+                2,
             )
         except ZeroDivisionError:
             output_dict["average"] = None

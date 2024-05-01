@@ -1,3 +1,7 @@
+INSERT INTO public.user_types (id, name) VALUES ('5c8d9fc8-76c1-4289-97b8-bf2398fca4f9', 'admin');
+INSERT INTO public.user_types (id, name) VALUES ('75f35a85-0833-415c-b19a-d18c1bda7977', 'chapter');
+
+
 INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('503130f2-de91-4e32-9978-4a8e28925936', 'Aston', 'London', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
 INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('d10c1516-338e-4d8e-bf3e-e02b6376bd5a', 'Bristol', 'London', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
 INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('5e846e59-ed29-444d-a9e0-e4301b30a0ce', 'Cambridge', 'Central', null, '2024-04-07 15:52:48.372440 +00:00', false, null);
@@ -9650,3 +9654,6 @@ INSERT INTO public.chapter_health (id, chapter_id, health_question_id, score, co
 INSERT INTO public.chapter_health (id, chapter_id, health_question_id, score, comments, year, month, created_date, is_deleted, last_modified_date) VALUES ('422ee50e-fead-4949-8113-7bf3b95f89a3', '061fb843-8a04-4a8c-8e6a-fa188cbe7a35', 13, 6, null, 2025, 3, '2024-04-16 22:09:58.153516 +00:00', false, null);
 INSERT INTO public.chapter_health (id, chapter_id, health_question_id, score, comments, year, month, created_date, is_deleted, last_modified_date) VALUES ('640df01b-7763-4e7c-93ff-8d3cf3235816', '061fb843-8a04-4a8c-8e6a-fa188cbe7a35', 14, 2, null, 2025, 3, '2024-04-16 22:09:58.153516 +00:00', false, null);
 INSERT INTO public.chapter_health (id, chapter_id, health_question_id, score, comments, year, month, created_date, is_deleted, last_modified_date) VALUES ('3ce7d7e9-b2b4-4abc-b610-5266d2a853c4', '061fb843-8a04-4a8c-8e6a-fa188cbe7a35', 15, 7, null, 2025, 3, '2024-04-16 22:09:58.153516 +00:00', false, null);
+
+INSERT INTO public.users (id, full_name, email, hashed_password, created_date, is_deleted, last_modified_date, chapter_id, user_type_id) VALUES ('4a686338-6e37-44a3-a661-d8d04eb7218b', 'Shivam Patel', 'shivam.patel.nhsf@gmail.com', '$2b$12$DBt2fa7/T2br7mIJW93aWeJSftafsWtxmLwhz37s.3/aYt5e2YnLG', '2024-05-01 12:46:27.859227 +00:00', false, null, null, '5c8d9fc8-76c1-4289-97b8-bf2398fca4f9');
+INSERT INTO public.users (id, full_name, email, hashed_password, created_date, is_deleted, last_modified_date, chapter_id, user_type_id) VALUES ('f7cf5b44-d5e7-4304-ac62-4de724ef5df5', 'string', 'user@example.com', '$2b$12$2TYQehvfzBYXo2uCKfaNr.zS4Ks9vY/Gv96uaj2XJ/DEbZ7M5bgH6', '2024-05-01 13:33:09.458042 +00:00', false, null, '503130f2-de91-4e32-9978-4a8e28925936', '75f35a85-0833-415c-b19a-d18c1bda7977');
