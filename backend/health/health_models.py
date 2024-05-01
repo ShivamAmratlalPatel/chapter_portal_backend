@@ -28,6 +28,7 @@ class HealthQuestion(Base):
         ForeignKey("section.id"),
         nullable=False,
     )
+    rag_guide = Column(String, nullable=True)
     created_date = Column(
         DateTime(timezone=True),
         nullable=False,

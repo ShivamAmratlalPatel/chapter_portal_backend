@@ -336,10 +336,15 @@ def get_questions(section_id: int, db: Session = db_session) -> list[dict]:
     )
 
     return [
-        {"field": "year", "header": "year"},
-        {"field": "month", "header": "month"},
+        {"field": "year", "header": "year", "rag_guide": None},
+        {"field": "month", "header": "month", "rag_guide": None},
     ] + [
-        {"field": str(question.id), "header": question.question}
+        {
+            "field": str(question.id),
+            "header": question.question,
+            "rag_guide": question.rag_guide,
+            "overlay_panel": False,
+        }
         for question in questions
     ]
 
@@ -367,18 +372,18 @@ def get_questions_by_section(section_id: int, db: Session = db_session) -> list[
 
     return (
         [
-            {"field": "chapter", "header": "chapter"},
-        ]
-        + [
-            {"field": str(question.id), "header": question.question}
-            for question in questions
+            {"field": "chapter", "header": "chapter", "rag_guide": None},
         ]
         + [
             {
-                "field": "average",
-                "header": "average",
+                "field": str(question.id),
+                "header": question.question,
+                "rag_guide": question.rag_guide,
+                "overlay_panel": False,
             }
+            for question in questions
         ]
+        + [{"field": "average", "header": "average", "rag_guide": None}]
     )
 
 
