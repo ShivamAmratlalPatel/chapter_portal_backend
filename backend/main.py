@@ -15,6 +15,7 @@ from backend.chapters.chapters_routes import chapters_router
 
 from .config import CORS_ORIGINS
 from .health.health_routes import health_router
+from .inventory.inventory_routes import inventory_router
 from .middleware import ContentSizeLimitMiddleware
 from .users.users_routes import users_router
 
@@ -63,6 +64,7 @@ app.add_middleware(ContentSizeLimitMiddleware, max_content_size=10_000_000)
 
 app.include_router(chapters_router)
 app.include_router(health_router)
+app.include_router(inventory_router)
 app.include_router(users_router)
 
 

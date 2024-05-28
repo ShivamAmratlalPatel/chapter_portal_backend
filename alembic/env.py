@@ -18,6 +18,11 @@ from backend.health.health_models import (  # noqa: F401
     HealthQuestion,
     Section,
 )
+from backend.inventory.inventory_models import (  # noqa: F401
+    Category,
+    InventoryItem,
+    Location,
+)
 from backend.membership.membership_models import MembershipLog  # noqa: F401
 from backend.users.users_models import UserType, User  # noqa: F401
 
