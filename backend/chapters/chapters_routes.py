@@ -271,7 +271,7 @@ def list_all_chapters(
                     {
                         "label": chapter.name,
                         "icon": "pi pi-fw pi-id-card",
-                        "to": f"/internal/health/{chapter.id}",
+                        "to": f"/internal/chapters/{chapter.id}",
                     }
                     for chapter in chapters
                 ],

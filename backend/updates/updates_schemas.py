@@ -1,0 +1,95 @@
+"""Update Schemas"""
+from datetime import date
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, EmailStr
+
+from backend.utils import generate_uuid, datetime_now
+
+
+class ChapterUpdateBase(BaseModel):
+    """Base Chapter Update Schema"""
+
+    chapter_id: UUID
+    update_date: date
+    update_text: str
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "chapter_id": generate_uuid(),
+            "update_date": datetime_now().date(),
+            "update_text": "Update text here",
+        },
+    )
+
+
+class ChapterUpdateCreate(ChapterUpdateBase):
+    """Create Chapter Update Schema"""
+
+    pass
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            **ChapterUpdateBase.model_config["json_schema_extra"],
+        },
+    )
+
+
+class ChapterUpdateRead(ChapterUpdateBase):
+    """Read Chapter Update Schema"""
+
+    id: UUID
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            **ChapterUpdateBase.model_config["json_schema_extra"],
+            "id": generate_uuid(),
+        },
+    )
+
+
+class SectionUpdateBase(BaseModel):
+    """Base Section Update Schema"""
+
+    section_id: UUID
+    update_date: date
+    update_text: str
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "section_id": generate_uuid(),
+            "update_date": datetime_now().date(),
+            "update_text": "Update text here",
+        },
+    )
+
+
+class SectionUpdateCreate(SectionUpdateBase):
+    """Create Section Update Schema"""
+
+    pass
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            **SectionUpdateBase.model_config["json_schema_extra"],
+        },
+    )
+
+
+class SectionUpdateRead(SectionUpdateBase):
+    """Read Section Update Schema"""
+
+    id: UUID
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            **SectionUpdateBase.model_config["json_schema_extra"],
+            "id": generate_uuid(),
+        },
+    )

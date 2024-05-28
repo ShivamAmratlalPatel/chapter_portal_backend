@@ -19,6 +19,7 @@ from backend.health.health_models import (  # noqa: F401
     Section,
 )
 from backend.membership.membership_models import MembershipLog  # noqa: F401
+from backend.updates.updates_models import ChapterUpdate, SectionUpdate  # noqa: F401
 from backend.users.users_models import UserType, User  # noqa: F401
 
 # this is the Alembic Config object, which provides
