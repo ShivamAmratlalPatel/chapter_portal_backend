@@ -2,18 +2,22 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from starlette import status
-from fastapi.responses import JSONResponse
 
 from backend.chapters.chapters_models import Chapter
 from backend.health.health_models import ChapterHealth, HealthQuestion, Section
 from backend.helpers import get_db
+from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_users import get_current_active_user
+from backend.users.users_schemas import UserBase
 from backend.utils import datetime_now, generate_uuid
 
 health_router = APIRouter()
 
 db_session = Depends(get_db)
+current_user_instance = Depends(get_current_active_user)
 
 
 @health_router.get(
@@ -26,6 +30,7 @@ def get_chapter_health(
     month: int,
     question_id: int,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> int:
     """
     Get the health score for a chapter in a given month and year for a given question
@@ -41,6 +46,7 @@ def get_chapter_health(
         int: The health score
 
     """
+    check_admin(current_user)
     chapter_health: ChapterHealth = (
         db.query(ChapterHealth)
         .join(HealthQuestion, ChapterHealth.health_question_id == HealthQuestion.id)
@@ -64,6 +70,7 @@ def get_chapter_health_by_section(
     chapter_id: UUID,
     section_id: int,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> list[dict]:
     """
     Get the health scores for a chapter by section
@@ -77,6 +84,7 @@ def get_chapter_health_by_section(
         list[dict]: The health scores
 
     """
+    check_admin(current_user)
     periods: list[dict] = [
         {"year": 2024, "month": 4},
         {"year": 2024, "month": 5},
@@ -132,6 +140,7 @@ def get_chapter_health_by_section_and_period(
     month: int,
     section_id: int,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """
     Get the health scores for a chapter by section
@@ -147,6 +156,7 @@ def get_chapter_health_by_section_and_period(
         list[dict]: The health scores
 
     """
+    check_admin(current_user)
     chapters: list[Chapter] = (
         db.query(Chapter)
         .filter(Chapter.zone == zone)
@@ -197,7 +207,7 @@ def get_chapter_health_by_section_and_period(
                         for question in questions
                         if output_dict[question.id] is not None
                         and isinstance(output_dict[question.id], int)
-                    ]
+                    ],
                 )
                 / len(
                     [
@@ -205,7 +215,7 @@ def get_chapter_health_by_section_and_period(
                         for question in questions
                         if output_dict[question.id] is not None
                         and isinstance(output_dict[question.id], int)
-                    ]
+                    ],
                 ),
                 2,
             )
@@ -228,6 +238,7 @@ def update_chapter_health(
     chapter_id: UUID,
     data: dict,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> None:
     """
     Update the health scores for a chapter
@@ -241,6 +252,7 @@ def update_chapter_health(
         None
 
     """
+    check_admin(current_user)
     year = data.pop("year")
     month = data.pop("month")
 
@@ -291,7 +303,10 @@ def update_chapter_health(
 
 
 @health_router.get("/sections", tags=["sections"])
-def get_sections(db: Session = db_session) -> JSONResponse:
+def get_sections(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> JSONResponse:
     """
     Get the sections
 
@@ -302,6 +317,7 @@ def get_sections(db: Session = db_session) -> JSONResponse:
         list[Section]: The sections
 
     """
+    check_admin(current_user)
     sections: list[Section] = (
         db.query(Section)
         .filter(Section.is_deleted.is_(False))
@@ -319,7 +335,11 @@ def get_sections(db: Session = db_session) -> JSONResponse:
 
 
 @health_router.get("/questions/section/{section_id}", tags=["questions"])
-def get_questions(section_id: int, db: Session = db_session) -> list[dict]:
+def get_questions(
+    section_id: int,
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> list[dict]:
     """
     Get the questions for a section
 
@@ -331,6 +351,7 @@ def get_questions(section_id: int, db: Session = db_session) -> list[dict]:
         list[dict]: The questions
 
     """
+    check_admin(current_user)
     questions: list[HealthQuestion] = (
         db.query(HealthQuestion)
         .filter(HealthQuestion.is_deleted.is_(False))
@@ -354,7 +375,11 @@ def get_questions(section_id: int, db: Session = db_session) -> list[dict]:
 
 
 @health_router.get("/questions/section/{section_id}/section", tags=["questions"])
-def get_questions_by_section(section_id: int, db: Session = db_session) -> list[dict]:
+def get_questions_by_section(
+    section_id: int,
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> list[dict]:
     """
     Get the questions for a section
 
@@ -366,6 +391,7 @@ def get_questions_by_section(section_id: int, db: Session = db_session) -> list[
         list[dict]: The questions
 
     """
+    check_admin(current_user)
     questions: list[HealthQuestion] = (
         db.query(HealthQuestion)
         .filter(HealthQuestion.is_deleted.is_(False))
@@ -392,7 +418,11 @@ def get_questions_by_section(section_id: int, db: Session = db_session) -> list[
 
 
 @health_router.get("/section/{section_id}", tags=["sections"])
-def get_section(section_id: int, db: Session = db_session) -> JSONResponse:
+def get_section(
+    section_id: int,
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> JSONResponse:
     """
     Get the section
 
@@ -404,6 +434,7 @@ def get_section(section_id: int, db: Session = db_session) -> JSONResponse:
         list[Section]: The sections
 
     """
+    check_admin(current_user)
     section: Section = (
         db.query(Section)
         .filter(Section.id == section_id)
@@ -423,13 +454,15 @@ def get_section(section_id: int, db: Session = db_session) -> JSONResponse:
 
 
 @health_router.get(
-    "/health/{chapter_id}/year/{year}/month/{month}/average", tags=["chapter_health"]
+    "/health/{chapter_id}/year/{year}/month/{month}/average",
+    tags=["chapter_health"],
 )
 def get_average_chapter_health(
     chapter_id: UUID,
     year: int,
     month: int,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """
     Get the average health score for a chapter in a given month and year
@@ -444,6 +477,7 @@ def get_average_chapter_health(
         int: The health score
 
     """
+    check_admin(current_user)
     sections: list[Section] = (
         db.query(Section)
         .filter(Section.is_deleted.is_(False))
@@ -496,13 +530,15 @@ def get_average_chapter_health(
 
 
 @health_router.get(
-    "/health/{chapter_id}/year/{year}/month/{month}/comments", tags=["chapter_health"]
+    "/health/{chapter_id}/year/{year}/month/{month}/comments",
+    tags=["chapter_health"],
 )
 def get_comments_chapter_health(
     chapter_id: UUID,
     year: int,
     month: int,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """
     Get the comments health score for a chapter in a given month and year
@@ -516,6 +552,7 @@ def get_comments_chapter_health(
     Returns:
         JSONResponse: The health comments
     """
+    check_admin(current_user)
     sections: list[Section] = (
         db.query(Section)
         .filter(Section.is_deleted.is_(False))
@@ -553,7 +590,7 @@ def get_comments_chapter_health(
                         "comment": chapter_health.comments
                         if chapter_health.comments
                         else None,
-                    }
+                    },
                 )
 
     return JSONResponse(

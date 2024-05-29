@@ -1,9 +1,11 @@
 """Chapter Database Models"""
 from sqlalchemy import Boolean, Column, DateTime, String, func
 from sqlalchemy.dialects import postgresql as pg
+from sqlalchemy.orm import relationship
 
 from backend.database import Base
 from backend.utils import datetime_now, generate_uuid
+from backend.visits.visits_models import Visit
 
 
 class Chapter(Base):
@@ -40,7 +42,24 @@ class Chapter(Base):
         ),
     )
 
+    chapter_visit_association = relationship(
+        "ChapterVisitAssociation",
+        back_populates="chapter",
+    )
+
     @property
     def to(self: "Chapter") -> str:
         """Return the chapter's URL path."""
-        return f"/health/{self.id}"
+        return f"/chapter/{self.id}"
+
+    @property
+    def visits(self: "Chapter") -> list[Visit]:
+        """Get a list of visits associated with the chapter."""
+        visits: list[Visit] = [
+            association.visit
+            for association in self.chapter_visit_association
+            if not association.is_deleted and not association.visit.is_deleted
+        ]
+
+        # Sort visits by visit date descending
+        return sorted(visits, key=lambda visit: visit.visit_date, reverse=True)

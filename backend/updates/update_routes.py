@@ -15,21 +15,29 @@ from backend.updates.updates_schemas import (
     SectionUpdateCreate,
     SectionUpdateRead,
 )
+from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_users import get_current_active_user
+from backend.users.users_schemas import UserBase
 from backend.utils import object_to_dict
 
 update_router = APIRouter()
 
 db_session = Depends(get_db)
+current_user_instance = Depends(get_current_active_user)
 
 
 @update_router.post(
-    "/chapter_update", response_model=ChapterUpdateRead, tags=["updates"]
+    "/chapter_update",
+    response_model=ChapterUpdateRead,
+    tags=["updates"],
 )
 def create_chapter_update(
     chapter_update: ChapterUpdateCreate,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Create a chapter update."""
+    check_admin(current_user)
     chapter = db.get(Chapter, chapter_update.chapter_id)
     if chapter is None:
         raise HTTPException(
@@ -54,8 +62,10 @@ def create_chapter_update(
 def read_chapter_update(
     chapter_update_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Read a chapter update."""
+    check_admin(current_user)
     chapter_update = db.get(ChapterUpdate, chapter_update_id)
     if chapter_update is None:
         raise HTTPException(
@@ -77,8 +87,10 @@ def update_chapter_update(
     chapter_update_id: UUID,
     chapter_update: ChapterUpdateCreate,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Update a chapter update."""
+    check_admin(current_user)
     existing_chapter_update: ChapterUpdate = db.get(ChapterUpdate, chapter_update_id)
     if existing_chapter_update is None:
         raise HTTPException(
@@ -95,7 +107,7 @@ def update_chapter_update(
 
     return JSONResponse(
         content=object_to_dict(
-            ChapterUpdateRead.model_validate(existing_chapter_update)
+            ChapterUpdateRead.model_validate(existing_chapter_update),
         ),
     )
 
@@ -108,8 +120,10 @@ def update_chapter_update(
 def delete_chapter_update(
     chapter_update_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> None:
     """Delete a chapter update."""
+    check_admin(current_user)
     chapter_update = db.get(ChapterUpdate, chapter_update_id)
     if chapter_update is None:
         raise HTTPException(
@@ -120,17 +134,19 @@ def delete_chapter_update(
     chapter_update.is_deleted = True
     db.commit()
 
-    return
-
 
 @update_router.post(
-    "/section_update", response_model=SectionUpdateRead, tags=["updates"]
+    "/section_update",
+    response_model=SectionUpdateRead,
+    tags=["updates"],
 )
 def create_section_update(
     section_update: SectionUpdateCreate,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Create a section update."""
+    check_admin(current_user)
     section_update = SectionUpdate(**section_update.dict())
     db.add(section_update)
     db.commit()
@@ -148,8 +164,10 @@ def create_section_update(
 def read_section_update(
     section_update_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Read a section update."""
+    check_admin(current_user)
     section_update = db.get(SectionUpdate, section_update_id)
     if section_update is None:
         raise HTTPException(
@@ -171,8 +189,10 @@ def update_section_update(
     section_update_id: UUID,
     section_update: SectionUpdateCreate,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Update a section update."""
+    check_admin(current_user)
     existing_section_update = db.get(SectionUpdate, section_update_id)
     if existing_section_update is None:
         raise HTTPException(
@@ -189,7 +209,7 @@ def update_section_update(
 
     return JSONResponse(
         content=object_to_dict(
-            SectionUpdateRead.model_validate(existing_section_update)
+            SectionUpdateRead.model_validate(existing_section_update),
         ),
     )
 
@@ -202,8 +222,10 @@ def update_section_update(
 def delete_section_update(
     section_update_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> None:
     """Delete a section update."""
+    check_admin(current_user)
     section_update = db.get(SectionUpdate, section_update_id)
     if section_update is None:
         raise HTTPException(
@@ -214,8 +236,6 @@ def delete_section_update(
     section_update.is_deleted = True
     db.commit()
 
-    return
-
 
 @update_router.get(
     "/chapter_update/chapter/{chapter_id}",
@@ -225,8 +245,10 @@ def delete_section_update(
 def read_chapter_updates(
     chapter_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Read all chapter updates for a chapter."""
+    check_admin(current_user)
     chapter = db.get(Chapter, chapter_id)
     if chapter is None:
         raise HTTPException(
@@ -257,8 +279,10 @@ def read_chapter_updates(
 def read_section_updates(
     section_id: int,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Read all section updates for a section."""
+    check_admin(current_user)
     section_updates = (
         db.query(SectionUpdate)
         .filter_by(section_id=section_id)

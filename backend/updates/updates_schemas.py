@@ -2,9 +2,9 @@
 from datetime import date
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict
 
-from backend.utils import generate_uuid, datetime_now
+from backend.utils import datetime_now, generate_uuid
 
 
 class ChapterUpdateBase(BaseModel):
@@ -26,8 +26,6 @@ class ChapterUpdateBase(BaseModel):
 
 class ChapterUpdateCreate(ChapterUpdateBase):
     """Create Chapter Update Schema"""
-
-    pass
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -70,8 +68,6 @@ class SectionUpdateBase(BaseModel):
 
 class SectionUpdateCreate(SectionUpdateBase):
     """Create Section Update Schema"""
-
-    pass
 
     model_config = ConfigDict(
         from_attributes=True,

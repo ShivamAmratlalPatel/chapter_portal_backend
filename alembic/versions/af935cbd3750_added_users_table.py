@@ -56,7 +56,7 @@ def upgrade() -> None:
         sa.Column("user_type_id", sa.UUID(), nullable=False),
         sa.ForeignKeyConstraint(["chapter_id"], ["chapters.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
-            ["user_type_id"], ["user_types.id"], ondelete="CASCADE"
+            ["user_type_id"], ["user_types.id"], ondelete="CASCADE",
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("username"),
@@ -77,9 +77,7 @@ def downgrade() -> None:
 
 def merge_upgrade_ops() -> None:
     """Merge upgrade operations from multiple branches."""
-    pass
 
 
 def merge_downgrade_ops() -> None:
     """Merge downgrade operations from multiple branches."""
-    pass
