@@ -180,7 +180,8 @@ def get_me(
 def get_all_users(
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
-):
+) -> list[UserBase]:
+    """Get all users."""
     check_admin(current_user)
     users = db.query(User).all()
 
@@ -192,7 +193,8 @@ def edit_user(
     full_name: str,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
-):
+) -> None:
+    """Edit user."""
     check_admin(current_user)
     user: User = db.query(User).filter(User.email == current_user.email).first()
 
@@ -206,12 +208,17 @@ def edit_user(
     db.commit()
 
 
-@users_router.put("/users/{user_id}/change_password", tags=["users"])
+@users_router.put(
+    "/users/{user_id}/change_password",
+    tags=["users"],
+    status_code=status.HTTP_204_NO_CONTENT,
+)
 def change_password(
     user_id: UUID,
     password: str,
     db: Session = db_session,
-):
+) -> None:
+    """Change password."""
     user: User = db.get(User, user_id)
 
     user.hashed_password = get_password_hash(password)

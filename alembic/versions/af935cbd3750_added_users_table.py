@@ -56,7 +56,9 @@ def upgrade() -> None:
         sa.Column("user_type_id", sa.UUID(), nullable=False),
         sa.ForeignKeyConstraint(["chapter_id"], ["chapters.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
-            ["user_type_id"], ["user_types.id"], ondelete="CASCADE",
+            ["user_type_id"],
+            ["user_types.id"],
+            ondelete="CASCADE",
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("username"),

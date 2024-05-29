@@ -48,7 +48,10 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_chapter_updates_id"), "chapter_updates", ["id"], unique=False,
+        op.f("ix_chapter_updates_id"),
+        "chapter_updates",
+        ["id"],
+        unique=False,
     )
     op.create_table(
         "section_updates",
@@ -78,7 +81,10 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_section_updates_id"), "section_updates", ["id"], unique=False,
+        op.f("ix_section_updates_id"),
+        "section_updates",
+        ["id"],
+        unique=False,
     )
     # ### end Alembic commands ###
 

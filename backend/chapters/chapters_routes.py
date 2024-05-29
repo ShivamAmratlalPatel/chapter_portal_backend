@@ -359,6 +359,8 @@ def get_zones(
 
     Args:
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
+
 
     Returns:
         list[Zone]: The zones
@@ -395,6 +397,7 @@ def get_chapters_by_zone(
     Args:
         zone (str): The zone
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[Chapter]: The chapters

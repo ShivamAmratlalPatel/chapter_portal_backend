@@ -24,7 +24,7 @@ current_user_instance = Depends(get_current_active_user)
     "/health/{chapter_id}/year/{year}/month/{month}/question/{question_id}",
     tags=["chapter_health"],
 )
-def get_chapter_health(
+def get_chapter_health(  # noqa: PLR0913
     chapter_id: UUID,
     year: int,
     month: int,
@@ -41,6 +41,7 @@ def get_chapter_health(
         month (int): The month
         question_id (int): The question id
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         int: The health score
@@ -79,6 +80,7 @@ def get_chapter_health_by_section(
         chapter_id (UUID): The chapter id
         section_id (int): The section id
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[dict]: The health scores
@@ -134,7 +136,7 @@ def get_chapter_health_by_section(
     "/health/zone/{zone}/year/{year}/month/{month}/section/{section_id}",
     tags=["chapter_health"],
 )
-def get_chapter_health_by_section_and_period(
+def get_chapter_health_by_section_and_period(  # noqa: PLR0913
     zone: str,
     year: int,
     month: int,
@@ -151,6 +153,7 @@ def get_chapter_health_by_section_and_period(
         month (int): The month
         section_id (int): The section id
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[dict]: The health scores
@@ -247,6 +250,7 @@ def update_chapter_health(
         chapter_id (UUID): The chapter id
         data (dict): The health scores
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         None
@@ -312,6 +316,7 @@ def get_sections(
 
     Args:
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[Section]: The sections
@@ -346,6 +351,7 @@ def get_questions(
     Args:
         section_id (int): The section id
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[dict]: The questions
@@ -386,6 +392,7 @@ def get_questions_by_section(
     Args:
         section_id (int): The section id
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[dict]: The questions
@@ -429,6 +436,7 @@ def get_section(
     Args:
         section_id (int): The section id
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[Section]: The sections
@@ -472,6 +480,7 @@ def get_average_chapter_health(
         year (int): The year
         month (int): The month
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         int: The health score
@@ -548,6 +557,7 @@ def get_comments_chapter_health(
         year (int): The year
         month (int): The month
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         JSONResponse: The health comments
