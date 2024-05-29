@@ -54,14 +54,14 @@ class ChapterUpdateRead(ChapterUpdateBase):
 class SectionUpdateBase(BaseModel):
     """Base Section Update Schema"""
 
-    section_id: UUID
+    section_id: int
     update_date: date
     update_text: str
 
     model_config = ConfigDict(
         from_attributes=True,
         json_schema_extra={
-            "section_id": generate_uuid(),
+            "section_id": 1,
             "update_date": datetime_now().date(),
             "update_text": "Update text here",
         },

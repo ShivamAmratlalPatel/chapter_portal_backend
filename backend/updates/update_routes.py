@@ -180,12 +180,17 @@ def update_section_update(
             detail="Section update not found",
         )
 
-    section_update = SectionUpdate(**section_update.dict())
-    db.merge(section_update)
+    existing_section_update.section_id = section_update.section_id
+    existing_section_update.update_date = section_update.update_date
+    existing_section_update.update_text = section_update.update_text
+
+    db.add(existing_section_update)
     db.commit()
 
     return JSONResponse(
-        content=object_to_dict(SectionUpdateRead.model_validate(section_update)),
+        content=object_to_dict(
+            SectionUpdateRead.model_validate(existing_section_update)
+        ),
     )
 
 
@@ -229,7 +234,12 @@ def read_chapter_updates(
             detail="Chapter not found",
         )
 
-    chapter_updates = db.query(ChapterUpdate).filter_by(chapter_id=chapter_id).all()
+    chapter_updates = (
+        db.query(ChapterUpdate)
+        .filter_by(chapter_id=chapter_id)
+        .filter_by(is_deleted=False)
+        .all()
+    )
 
     return JSONResponse(
         content=[
@@ -245,11 +255,16 @@ def read_chapter_updates(
     tags=["updates"],
 )
 def read_section_updates(
-    section_id: UUID,
+    section_id: int,
     db: Session = db_session,
 ) -> JSONResponse:
     """Read all section updates for a section."""
-    section_updates = db.query(SectionUpdate).filter_by(section_id=section_id).all()
+    section_updates = (
+        db.query(SectionUpdate)
+        .filter_by(section_id=section_id)
+        .filter_by(is_deleted=False)
+        .all()
+    )
 
     return JSONResponse(
         content=[
