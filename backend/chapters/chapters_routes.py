@@ -293,7 +293,7 @@ def list_all_chapters(
             {
                 "label": team.name,
                 "icon": "pi pi-fw pi-id-card",
-                "to": f"/internal/health/section/{team.id}",
+                "to": f"/internal/section/{team.id}",
             },
         )
 

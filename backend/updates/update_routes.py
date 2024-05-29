@@ -79,19 +79,24 @@ def update_chapter_update(
     db: Session = db_session,
 ) -> JSONResponse:
     """Update a chapter update."""
-    existing_chapter_update = db.get(ChapterUpdate, chapter_update_id)
+    existing_chapter_update: ChapterUpdate = db.get(ChapterUpdate, chapter_update_id)
     if existing_chapter_update is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Chapter update not found",
         )
 
-    chapter_update = ChapterUpdate(**chapter_update.dict())
-    db.merge(chapter_update)
+    existing_chapter_update.chapter_id = chapter_update.chapter_id
+    existing_chapter_update.update_date = chapter_update.update_date
+    existing_chapter_update.update_text = chapter_update.update_text
+
+    db.add(existing_chapter_update)
     db.commit()
 
     return JSONResponse(
-        content=object_to_dict(ChapterUpdateRead.model_validate(chapter_update)),
+        content=object_to_dict(
+            ChapterUpdateRead.model_validate(existing_chapter_update)
+        ),
     )
 
 
@@ -205,3 +210,50 @@ def delete_section_update(
     db.commit()
 
     return
+
+
+@update_router.get(
+    "/chapter_update/chapter/{chapter_id}",
+    response_model=list[ChapterUpdateRead],
+    tags=["updates"],
+)
+def read_chapter_updates(
+    chapter_id: UUID,
+    db: Session = db_session,
+) -> JSONResponse:
+    """Read all chapter updates for a chapter."""
+    chapter = db.get(Chapter, chapter_id)
+    if chapter is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Chapter not found",
+        )
+
+    chapter_updates = db.query(ChapterUpdate).filter_by(chapter_id=chapter_id).all()
+
+    return JSONResponse(
+        content=[
+            object_to_dict(ChapterUpdateRead.model_validate(chapter_update))
+            for chapter_update in chapter_updates
+        ],
+    )
+
+
+@update_router.get(
+    "/section_update/section/{section_id}",
+    response_model=list[SectionUpdateRead],
+    tags=["updates"],
+)
+def read_section_updates(
+    section_id: UUID,
+    db: Session = db_session,
+) -> JSONResponse:
+    """Read all section updates for a section."""
+    section_updates = db.query(SectionUpdate).filter_by(section_id=section_id).all()
+
+    return JSONResponse(
+        content=[
+            object_to_dict(SectionUpdateRead.model_validate(section_update))
+            for section_update in section_updates
+        ],
+    )
