@@ -176,3 +176,28 @@ def delete_visit(
 
     db.add(visit)
     db.commit()
+
+
+@visit_router.get(
+    "/visits/chapter/{chapter_id}", response_model=list[VisitRead], tags=["visits"]
+)
+def get_visits_by_chapter(
+    chapter_id: UUID,
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> list[VisitRead]:
+    """Get visits by chapter"""
+    check_admin(current_user)
+
+    visits: list[Visit] = (
+        db.query(Visit)
+        .join(ChapterVisitAssociation)
+        .filter(
+            ChapterVisitAssociation.chapter_id == chapter_id,
+            ChapterVisitAssociation.is_deleted.is_(False),
+            Visit.is_deleted.is_(False),
+        )
+        .all()
+    )
+
+    return [VisitRead.model_validate(visit) for visit in visits]
