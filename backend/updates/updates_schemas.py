@@ -1,8 +1,8 @@
 """Update Schemas"""
-from datetime import date
+from datetime import date, datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from backend.utils import datetime_now, generate_uuid
 
@@ -11,7 +11,7 @@ class ChapterUpdateBase(BaseModel):
     """Base Chapter Update Schema"""
 
     chapter_id: UUID
-    update_date: date
+    update_date: date | datetime
     update_text: str
 
     model_config = ConfigDict(
@@ -22,6 +22,13 @@ class ChapterUpdateBase(BaseModel):
             "update_text": "Update text here",
         },
     )
+
+    @field_validator("update_date", mode="before")
+    @classmethod
+    def convert_datetime_to_date(cls, obj: date | datetime) -> date:
+        if isinstance(obj, datetime):
+            return obj.date()
+        return obj
 
 
 class ChapterUpdateCreate(ChapterUpdateBase):

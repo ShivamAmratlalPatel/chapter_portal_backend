@@ -18,7 +18,7 @@ from backend.updates.updates_schemas import (
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_schemas import UserBase
-from backend.utils import object_to_dict
+from backend.utils import object_to_dict, generate_uuid
 
 update_router = APIRouter()
 
@@ -45,7 +45,7 @@ def create_chapter_update(
             detail="Chapter not found",
         )
 
-    chapter_update = ChapterUpdate(**chapter_update.dict())
+    chapter_update = ChapterUpdate(id=generate_uuid(), **chapter_update.dict())
     db.add(chapter_update)
     db.commit()
 
@@ -147,7 +147,7 @@ def create_section_update(
 ) -> JSONResponse:
     """Create a section update."""
     check_admin(current_user)
-    section_update = SectionUpdate(**section_update.dict())
+    section_update = SectionUpdate(id=generate_uuid(), **section_update.dict())
     db.add(section_update)
     db.commit()
 
