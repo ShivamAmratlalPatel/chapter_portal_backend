@@ -82,7 +82,7 @@ class Visit(Base):
     visit_category_id = Column(
         pg.UUID(as_uuid=True),
         ForeignKey("visit_categories.id"),
-        nullable=False,
+        nullable=True,
     )
     comments = Column(String, nullable=True)
 

@@ -13,7 +13,7 @@ class VisitBase(BaseModel):
     """Visit Base"""
 
     visit_date: date
-    visit_category_id: UUID
+    visit_category_id: UUID | None = None
     comments: str
 
     model_config = ConfigDict(
@@ -43,7 +43,7 @@ class VisitRead(VisitBase):
     """Visit Read"""
 
     id: UUID
-    visit_category: dict
+    visit_category: dict | None = None
     chapters: list[ChapterRead]
     user_name: str
 

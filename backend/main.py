@@ -12,12 +12,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 
 from backend.chapters.chapters_routes import chapters_router
+from .committees.committee_routes import committee_router
 
 from .config import CORS_ORIGINS
 from .health.health_routes import health_router
 from .middleware import ContentSizeLimitMiddleware
 from .updates.update_routes import update_router
 from .users.users_routes import users_router
+from .visits.visits_routes import visit_router
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "WARNING").upper()
 logging.basicConfig(level=LOGLEVEL)
@@ -63,9 +65,11 @@ app.add_middleware(
 app.add_middleware(ContentSizeLimitMiddleware, max_content_size=10_000_000)
 
 app.include_router(chapters_router)
+app.include_router(committee_router)
 app.include_router(health_router)
 app.include_router(update_router)
 app.include_router(users_router)
+app.include_router(visit_router)
 
 
 @app.get(
