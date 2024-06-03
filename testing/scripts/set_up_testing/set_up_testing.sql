@@ -62,57 +62,7 @@ INSERT INTO public.section (id, name, is_deleted) VALUES (4, 'Sampark', false);
 INSERT INTO public.section (id, name, is_deleted) VALUES (5, 'Sanskaar', false);
 
 
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (1, 'Committee Relationships', 1, e'Poor 1-3:
-- rare committee meetings
-- disorganised
-- committee are not very close
-- frequent conflicts
-
-Average 4-6:
-- meetings at least once a month
-- fairly organised for the year ahead
-- committee have decent relationships
-- some conflicts
-
-Good 7-10:
-- frequent meetings (once a fortnight)
-- organised for the year ahead
-- committee have a good relationship
-- rare/no conflicts ', '2024-04-08 14:50:20.721958 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (2, 'SU Relationships', 1, e'Poor 1-3:
-- no contact with the SU
-- not familiar with the SU policies/rules
-- conflicts with the SU
-- don\'t use the SU platform at all
-
-Average 4-6:
-- contact with the SU when necessary
-- fairly familiar with SU policies/rules
-- some use of the SU platform
-- some misunderstanding with SU
-
-Good 7-10:
-- frequent contact with SU
-- very familiar with SU policies/rules
-- frequent use of the SU platform
-- rare/ no conflicts with the SU', '2024-04-10 01:22:18.572606 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (3, 'NHSF (UK) Relationship', 1, e'Poor 1-3:
-- no contact with chapter buddy
-- not familiar with NHSF\'s policies/rules
-- conflicts with the chapter buddy
-- don\'t use the chapter buddy
-
-Average 4-6:
-- contact with the chapter buddy when necessary
-- fairly familiar with NHSF\'s policies/rules
-- some use of the chapter buddy
-
-Good 7-10:
-- frequent contact with chapter buddy
-- very familiar with NHSF\'s policies/rules
-- frequent use of chapter buddy
-- rare/ no conflicts with NHSF', '2024-04-10 01:22:31.243597 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (4, 'Financial Planning', 2, e'Poor:
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (4, 'Financial Planning', 2, '2024-04-10 01:26:07.630183 +00:00', false, null, e'Poor:
 -Poor Budget planning (Very unrealistic+Unlikely to grow)
 -Lack of Budgets or any form of cash flow plans being made
 -Poor Risk Management (Unrealistic methods of making plans achievable)
@@ -133,8 +83,8 @@ Good:
 -High level of detail in analysis for financial plans (e.g. breakeven, cost per person, costing methods)
 -Multi-sources of cash inflow (e.g. membership fee, events, sports, SU and etc)
 -Excellent uses of society funding with above 20% growth
--A financial plan focused on sustainability ', '2024-04-10 01:26:07.630183 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (5, 'Income Generation', 2, e'Poor:
+-A financial plan focused on sustainability ');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (5, 'Income Generation', 2, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 -No plans for sponsorships
 -No plans for making use of SU Grants
 -Poor applications for additional funding
@@ -150,8 +100,8 @@ Good:
 -Detailed plan in place for the usage of SU funding for the year against all events and activities
 -Securing financial and non-financial sponsors and maintaining a good relationship with the vendor
 -Detailed packages made for both SU funding applications and sponsorship packages
--High level of understanding of how to go about it with a detailed plan in place', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (6, 'SU Relationships', 2, e'Poor:
+-High level of understanding of how to go about it with a detailed plan in place');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (6, 'SU Relationships', 2, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - no contact with the SU
 - not familiar with the SU policies/rules
 - conflicts with the SU
@@ -165,16 +115,16 @@ Average:
 Good:
 - frequent contact with SU
 - very familiar with SU policies/rules
-- rare/ no conflicts with the SU', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (7, 'Interaction with other societies/chapters', 3, e'Poor: Other societies/chapters unaware of named hindu society.
+- rare/ no conflicts with the SU');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (7, 'Interaction with other societies/chapters', 3, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor: Other societies/chapters unaware of named hindu society.
 
 Average: Conversations with other socieities/chapters, discussions about how to collobarate and support one another.
 
 Good:
 Relationship with other socieites/chapters,
 Hold collaboration event/ support with events taking place on campus.
-Ideation on how to work together and bring in new events and students ', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (8, 'Engagement with zonal/national events', 3, e'Poor:
+Ideation on how to work together and bring in new events and students ');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (8, 'Engagement with zonal/national events', 3, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 No attendance or interest in zonal/national events
 
 Average:
@@ -185,8 +135,8 @@ Lack of interest in supporting the event
 Good:
 A large proportion of members and committee attend
 Understand the purpose of the event
-Willingness to support and engage with National Committee ', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (9, 'Relationships with suppliers/vendors', 3, e'Poor:
+Willingness to support and engage with National Committee ');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (9, 'Relationships with suppliers/vendors', 3, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - Struggle to find suitable vendors and suppliers for events
 - Last minute finds of vendors/suppliers
 - Event cancelled due to lack of suitable supplier/vendor
@@ -197,8 +147,8 @@ Average:
 
 Good:
 - List of contacts in place willing to support the Hindu society for their events
-- Willing to help no matter the time-frame', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (10, 'Social Media Performance', 4, e'Poor:
+- Willing to help no matter the time-frame');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (10, 'Social Media Performance', 4, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - Lack of social media outreach on major channels (1 a term)
 - Very few polls and stories attracting potential students to what the Hindu Soc offers
 - Only one-two significant Utsav posts and little to no use of Social Media for promoting Hindu Soc activities/societal work
@@ -212,8 +162,8 @@ Average:
 Good:
 - Regular SM posts highlighting different Utsavs, Awareness Days, events taking place and Hindu Soc activities
 - Regular use of polls or stories after every post to promote engagement or saved stories promoting major Hindu Soc initiatives
-- SM showcases the different plethora of activities undertaken by said Society, such as Aartis, Mandir visits, Sewa projects, socials, and those of other Hindu societies/societies on campus.', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (11, 'Interaction with NHSF (UK)', 4, e'Poor:
+- SM showcases the different plethora of activities undertaken by said Society, such as Aartis, Mandir visits, Sewa projects, socials, and those of other Hindu societies/societies on campus.');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (11, 'Interaction with NHSF (UK)', 4, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - No interaction with NHSF (UK) media
 - Little to no interaction with other University SM or within designated Zonal HSoc SMs
 
@@ -223,8 +173,8 @@ Average:
 
 Good:
 - Regular reposting or interactions with NHSF media on significant platforms
-- Regular engagement and hosted/promoted events with other Hindu Soc SM\'s and other similar societies on campus', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (12, 'Social Media Outreach', 4, e'Poor:
+- Regular engagement and hosted/promoted events with other Hindu Soc SM\'s and other similar societies on campus');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (12, 'Social Media Outreach', 4, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - No existing relationships with multifaith/similar-minded societies
 
 Average:
@@ -232,8 +182,8 @@ Average:
 - Mentions or partnerships within local society media to push outreach
 
 Good:
-- Significant collaborations with networks or societies affiliated with NHSF (ie Sewa UK, Youth for Sewa, Tattva, Vaani etc) as well the societal types mentioned in previous criteria', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (13, 'Aarti & Learning Sessions', 5, e'Poor:
+- Significant collaborations with networks or societies affiliated with NHSF (ie Sewa UK, Youth for Sewa, Tattva, Vaani etc) as well the societal types mentioned in previous criteria');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (13, 'Aarti & Learning Sessions', 5, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - No engagement from members or committee
 - Inconsistent number of sessions throughout year
 - Lacking delivery that had many improvements
@@ -249,8 +199,8 @@ Good:
 - Great engagement with many attendees
 - Consistent sessions throughout the year
 - High quality session that was well delivered
-- Clear message of session given across', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (14, 'Sewa Intiatives', 5, e'Poor:
+- Clear message of session given across');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (14, 'Sewa Intiatives', 5, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - No engagement from members or committee
 - Inconsistent number of sessions throughout year
 - The same sessions reused with no variety
@@ -269,8 +219,8 @@ Good:
 - Consistent sessions throughout the year
 - Variety of sessions
 - Well planned event with no problems
-- Long lasting impact and relationships formed', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (15, 'Collaborations with Samaj', 5, e'Poor:
+- Long lasting impact and relationships formed');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (15, 'Collaborations with Samaj', 5, '2024-04-10 01:30:23.775051 +00:00', false, null, e'Poor:
 - No engagement from members or committee
 - Non-existent relationship
 - No contact with Mandir or community
@@ -286,12 +236,70 @@ Good:
 - Great engagement with many attendees
 - Healthy relationship where Mandir can contact society and visa versa
 - Enganged with Mandir/Community many times
-- 2+ speakers from the list have visited during the year', '2024-04-10 01:30:23.775051 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (16, 'Campus Comments', 1, null, '2024-04-16 23:50:53.821537 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (17, 'Finance Comments', 2, null, '2024-04-16 23:50:53.821537 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (18, 'Events Comments', 3, null, '2024-04-16 23:50:53.821537 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (19, 'Sampark Comments', 4, null, '2024-04-16 23:50:53.821537 +00:00', false, null);
-INSERT INTO public.health_questions (id, question, section_id, rag_guide, created_date, is_deleted, last_modified_date) VALUES (20, 'Sanskaar Comments', 5, null, '2024-04-16 23:50:53.821537 +00:00', false, null);
+- 2+ speakers from the list have visited during the year');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (16, 'Campus Comments', 1, '2024-04-16 23:50:53.821537 +00:00', false, null, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (17, 'Finance Comments', 2, '2024-04-16 23:50:53.821537 +00:00', false, null, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (18, 'Events Comments', 3, '2024-04-16 23:50:53.821537 +00:00', false, null, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (19, 'Sampark Comments', 4, '2024-04-16 23:50:53.821537 +00:00', false, null, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (20, 'Sanskaar Comments', 5, '2024-04-16 23:50:53.821537 +00:00', false, null, null);
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (3, 'NHSF (UK) Relationship', 1, '2024-04-10 01:22:31.243597 +00:00', false, null, e'Poor 1-3:
+- unresponsive to chapter buddy
+- not familiar with NHSF\'s policies/rules
+- conflicts with the chapter buddy
+- don\'t use the chapter buddy
+
+Average 4-6:
+- contact with the chapter buddy when necessary
+- fairly familiar with NHSF\'s policies/rules
+- some use of the chapter buddy
+- sometimes initiating contact with chapter buddy
+
+Good 7-10:
+- weekly contact with chapter buddy
+- responsive
+- very familiar with NHSF\'s policies/rules
+- rare/ no conflicts with NHSF
+- two way relationship with chapter and chapter buddy');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (2, 'SU Relationships', 1, '2024-04-10 01:22:18.572606 +00:00', false, null, e'Poor 1-3:
+- no contact with the SU
+- not familiar with the SU policies/rules
+- conflicts with the SU
+- don\'t use the SU platform at all
+- lack of support from SU (room bookings, emails, communication)
+
+Average 4-6:
+- contact with the SU when necessary
+- fairly familiar with SU policies/rules
+- some use of the SU platform
+- some misunderstanding with SU
+- some support from SU (room bookings, emails, communication)
+
+Good 7-10:
+- frequent contact with SU
+- very familiar with SU policies/rules
+- frequent use of the SU platform
+- rare/ no conflicts with the SU
+- strong support from SU (room bookings, emails, communication)');
+INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (1, 'Committee Relationships', 1, '2024-04-08 14:50:20.721958 +00:00', false, null, e'Poor 1-3:
+- rare committee meetings
+- disorganised
+- committee are not very close
+- no socials outside of hindu society events
+- frequent conflicts
+
+Average 4-6:
+- meetings at least once a month
+- fairly organised for the year ahead
+- committee have decent relationships
+- some socials outside of hindu society events
+- some conflicts
+
+Good 7-10:
+- frequent meetings (once a fortnight)
+- organised for the year ahead
+- committee have a good relationship
+- frequent socials outside of hindu society events
+- rare/no conflicts ');
 
 
 INSERT INTO public.chapter_health (id, chapter_id, health_question_id, score, comments, year, month, created_date, is_deleted, last_modified_date) VALUES ('1130fd18-7494-4bcc-b17d-7c6e6ddee8ca', '503130f2-de91-4e32-9978-4a8e28925936', 1, 5, null, 2024, 4, '2024-04-16 22:09:58.153516 +00:00', false, null);
