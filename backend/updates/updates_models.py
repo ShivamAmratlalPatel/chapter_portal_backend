@@ -112,8 +112,9 @@ class SectionUpdate(Base):
     update_text = Column(String)
 
     section = relationship("Section")
+    user = relationship("User")
 
     @property
-    def user_name(self: "ChapterUpdate") -> str:
+    def user_name(self: "SectionUpdate") -> str:
         """Get the user's name."""
         return self.user.full_name
