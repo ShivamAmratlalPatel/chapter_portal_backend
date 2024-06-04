@@ -16,6 +16,7 @@ from backend.updates.updates_schemas import (
     SectionUpdateRead,
 )
 from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_schemas import UserBase
 from backend.utils import object_to_dict, generate_uuid
@@ -38,6 +39,9 @@ def create_chapter_update(
 ) -> JSONResponse:
     """Create a chapter update."""
     check_admin(current_user)
+
+    user = get_user_by_user_base(current_user, db)
+
     chapter = db.get(Chapter, chapter_update.chapter_id)
     if chapter is None:
         raise HTTPException(
@@ -45,7 +49,9 @@ def create_chapter_update(
             detail="Chapter not found",
         )
 
-    chapter_update = ChapterUpdate(id=generate_uuid(), **chapter_update.dict())
+    chapter_update = ChapterUpdate(
+        id=generate_uuid(), **chapter_update.dict(), user_id=user.id
+    )
     db.add(chapter_update)
     db.commit()
 
@@ -98,6 +104,14 @@ def update_chapter_update(
             detail="Chapter update not found",
         )
 
+    user = get_user_by_user_base(current_user, db)
+
+    if user.id != existing_chapter_update.user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User does not have permission to update this chapter update",
+        )
+
     existing_chapter_update.chapter_id = chapter_update.chapter_id
     existing_chapter_update.update_date = chapter_update.update_date
     existing_chapter_update.update_text = chapter_update.update_text
@@ -147,7 +161,10 @@ def create_section_update(
 ) -> JSONResponse:
     """Create a section update."""
     check_admin(current_user)
-    section_update = SectionUpdate(id=generate_uuid(), **section_update.dict())
+    user = get_user_by_user_base(current_user, db)
+    section_update = SectionUpdate(
+        id=generate_uuid(), **section_update.dict(), user_id=user.id
+    )
     db.add(section_update)
     db.commit()
 
@@ -198,6 +215,14 @@ def update_section_update(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Section update not found",
+        )
+
+    user = get_user_by_user_base(current_user, db)
+
+    if user.id != existing_section_update.user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User does not have permission to update this section update",
         )
 
     existing_section_update.section_id = section_update.section_id

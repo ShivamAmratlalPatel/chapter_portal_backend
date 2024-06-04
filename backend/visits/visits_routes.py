@@ -7,6 +7,7 @@ from starlette import status
 
 from backend.helpers import get_db
 from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
@@ -29,20 +30,7 @@ def create_visit(
     """Create a new visit"""
     check_admin(current_user)
 
-    user: User | None = (
-        db.query(User)
-        .filter_by(email=current_user.email)
-        .filter_by(is_deleted=False)
-        .filter_by(full_name=current_user.full_name)
-        .order_by(User.created_date.desc())
-        .first()
-    )
-
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
-        )
+    user = get_user_by_user_base(current_user, db)
 
     chapter_visit: Visit = Visit(
         id=generate_uuid(),
@@ -108,20 +96,7 @@ def update_visit(
             detail="Visit not found",
         )
 
-    user: User | None = (
-        db.query(User)
-        .filter_by(email=current_user.email)
-        .filter_by(is_deleted=False)
-        .filter_by(full_name=current_user.full_name)
-        .order_by(User.created_date.desc())
-        .first()
-    )
-
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
-        )
+    user = get_user_by_user_base(current_user, db)
 
     if visit_instance.user_id != user.id:
         raise HTTPException(

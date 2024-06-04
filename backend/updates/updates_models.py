@@ -33,6 +33,11 @@ class ChapterUpdate(Base):
         ForeignKey("chapters.id"),
         nullable=False,
     )
+    user_id = Column(
+        pg.UUID(as_uuid=True),
+        ForeignKey("users.id"),
+        nullable=False,
+    )
     created_date = Column(
         DateTime(timezone=True),
         nullable=False,
@@ -55,6 +60,12 @@ class ChapterUpdate(Base):
     update_text = Column(String, nullable=False)
 
     chapter = relationship("Chapter")
+    user = relationship("User")
+
+    @property
+    def user_name(self: "ChapterUpdate") -> str:
+        """Get the user's name."""
+        return self.user.full_name
 
 
 class SectionUpdate(Base):
@@ -72,6 +83,11 @@ class SectionUpdate(Base):
     section_id = Column(
         Integer,
         ForeignKey("section.id"),
+        nullable=False,
+    )
+    user_id = Column(
+        pg.UUID(as_uuid=True),
+        ForeignKey("users.id"),
         nullable=False,
     )
     created_date = Column(
@@ -96,3 +112,8 @@ class SectionUpdate(Base):
     update_text = Column(String)
 
     section = relationship("Section")
+
+    @property
+    def user_name(self: "ChapterUpdate") -> str:
+        """Get the user's name."""
+        return self.user.full_name

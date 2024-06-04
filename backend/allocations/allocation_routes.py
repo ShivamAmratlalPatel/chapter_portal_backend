@@ -11,6 +11,7 @@ from backend.allocations.allocation_models import Allocation
 from backend.allocations.allocation_schemas import AllocationCreate, AllocationRead
 
 from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
@@ -35,14 +36,7 @@ def create_allocation(
     """Create an allocation."""
     check_admin(current_user)
 
-    user: User | None = (
-        db.query(User)
-        .filter_by(
-            email=current_user.email,
-        )
-        .filter_by(full_name=current_user.full_name)
-        .first()
-    )
+    user = get_user_by_user_base(current_user, db)
 
     allocation = Allocation(
         id=generate_uuid(),
