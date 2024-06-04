@@ -47,6 +47,7 @@ class ChapterUpdateRead(ChapterUpdateBase):
 
     id: UUID
     user_name: str
+    chapter_name: str
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -54,6 +55,7 @@ class ChapterUpdateRead(ChapterUpdateBase):
             **ChapterUpdateBase.model_config["json_schema_extra"],
             "id": generate_uuid(),
             "user_name": "User Name",
+            "chapter_name": "Chapter Name",
         },
     )
 

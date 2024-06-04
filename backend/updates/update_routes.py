@@ -321,3 +321,34 @@ def read_section_updates(
             for section_update in section_updates
         ],
     )
+
+
+@update_router.get(
+    "/chapter_update/zone/{zone_name}",
+    response_model=list[ChapterUpdateRead],
+    tags=["updates"],
+)
+def read_chapter_updates(
+    zone_name: str,
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> JSONResponse:
+    """Read all chapter updates for a chapter."""
+    check_admin(current_user)
+
+    chapter_updates = (
+        db.query(ChapterUpdate)
+        .join(Chapter, Chapter.id == ChapterUpdate.chapter_id)
+        .filter(Chapter.zone == zone_name)
+        .filter(Chapter.is_deleted.is_(False))
+        .filter(ChapterUpdate.is_deleted.is_(False))
+        .order_by(ChapterUpdate.update_date.desc())
+        .all()
+    )
+
+    return JSONResponse(
+        content=[
+            object_to_dict(ChapterUpdateRead.model_validate(chapter_update))
+            for chapter_update in chapter_updates
+        ],
+    )

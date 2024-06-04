@@ -67,6 +67,11 @@ class ChapterUpdate(Base):
         """Get the user's name."""
         return self.user.full_name
 
+    @property
+    def chapter_name(self: "ChapterUpdate") -> str:
+        """Get the chapter's name."""
+        return self.chapter.name
+
 
 class SectionUpdate(Base):
     """Chapter Updates"""
