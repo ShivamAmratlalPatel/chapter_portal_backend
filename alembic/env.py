@@ -8,6 +8,7 @@ from alembic import context
 from backend.chapters.chapters_models import Chapter  # noqa: F401
 from backend.committees.committee_models import CommitteeMember  # noqa: F401
 from backend.database import Base
+from backend.allocations.allocation_models import Allocation  # noqa: F401
 from backend.events.event_models import (  # noqa: F401
     ChapterEventAssociation,
     Event,
