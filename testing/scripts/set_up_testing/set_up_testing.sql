@@ -55,11 +55,12 @@ INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, la
 INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('e1edf9fc-2138-412b-83fd-06299951296a', 'Brighton_and_Sussex', 'South', null, '2024-04-10 20:25:58.593917 +00:00', false, null);
 INSERT INTO public.chapters (id, name, zone, email, created_date, is_deleted, last_modified_date) VALUES ('061fb843-8a04-4a8c-8e6a-fa188cbe7a35', 'Oxford_Brookes', 'South', null, '2024-04-10 20:25:58.593917 +00:00', false, null);
 
-INSERT INTO public.section (id, name, is_deleted) VALUES (1, 'Campus', false);
-INSERT INTO public.section (id, name, is_deleted) VALUES (2, 'Finance', false);
-INSERT INTO public.section (id, name, is_deleted) VALUES (3, 'Events', false);
-INSERT INTO public.section (id, name, is_deleted) VALUES (4, 'Sampark', false);
-INSERT INTO public.section (id, name, is_deleted) VALUES (5, 'Sanskaar', false);
+INSERT INTO public.section (id, name, is_deleted, icon) VALUES (1, 'Campus', false, 'pi pi-users');
+INSERT INTO public.section (id, name, is_deleted, icon) VALUES (2, 'Finance', false, 'pi pi-pound');
+INSERT INTO public.section (id, name, is_deleted, icon) VALUES (3, 'Events', false, 'pi pi-calendar');
+INSERT INTO public.section (id, name, is_deleted, icon) VALUES (4, 'Sampark', false, 'pi pi-instagram');
+INSERT INTO public.section (id, name, is_deleted, icon) VALUES (5, 'Sanskaar', false, 'pi pi-bolt');
+
 
 
 INSERT INTO public.health_questions (id, question, section_id, created_date, is_deleted, last_modified_date, rag_guide) VALUES (4, 'Financial Planning', 2, '2024-04-10 01:26:07.630183 +00:00', false, null, e'Poor:

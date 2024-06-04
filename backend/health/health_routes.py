@@ -607,3 +607,63 @@ def get_comments_chapter_health(
         status_code=status.HTTP_200_OK,
         content=output,
     )
+
+
+@health_router.get(
+    "/health/{chapter_id}/latest",
+    tags=["chapter_health"],
+)
+def get_chapter_latest_health(
+    chapter_id: UUID,
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+):
+    check_admin(current_user)
+
+    sections: list[Section] = (
+        db.query(Section)
+        .filter(Section.is_deleted.is_(False))
+        .order_by(Section.id)
+        .all()
+    )
+
+    output = []
+
+    for section in sections:
+        questions: list[HealthQuestion] = (
+            db.query(HealthQuestion)
+            .filter(HealthQuestion.section_id == section.id)
+            .filter(HealthQuestion.is_deleted.is_(False))
+            .filter(HealthQuestion.question.ilike("%Comments%").is_(False))
+            .all()
+        )
+
+        health_scores = []
+        for question in questions:
+            chapter_health: ChapterHealth | None = (
+                db.query(ChapterHealth)
+                .filter(ChapterHealth.chapter_id == chapter_id)
+                .filter(ChapterHealth.health_question_id == question.id)
+                .filter(ChapterHealth.is_deleted.is_(False))
+                .order_by(ChapterHealth.year.desc())
+                .order_by(ChapterHealth.month.desc())
+                .first()
+            )
+
+            if chapter_health:
+                health_scores.append(chapter_health.score)
+
+        output.append(
+            {
+                "section": section.name,
+                "average": round(sum(health_scores) / len(health_scores), 2)
+                if health_scores
+                else None,
+                "icon": section.icon,
+            },
+        )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=output,
+    )
