@@ -298,8 +298,8 @@ def update_chapter_health(
                 year=year,
                 month=month,
                 health_question_id=db_question.id,
-                score=score if score.isdigit() else None,
-                comments=score if not score.isdigit() else None,
+                score=score if score and score.isdigit() else None,
+                comments=score if score is not None and not score.isdigit() else None,
             )
 
         db.add(chapter_health)
