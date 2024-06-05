@@ -72,6 +72,7 @@ class ChapterHealth(Base):
     comments = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     month = Column(Integer, nullable=True)
+    week = Column(Integer, nullable=True)
 
     created_date = Column(
         DateTime(timezone=True),

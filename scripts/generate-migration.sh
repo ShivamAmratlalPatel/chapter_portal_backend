@@ -1,1 +1,1 @@
-PYTHONPATH=. alembic revision --autogenerate -m "added meetings tables"
+PYTHONPATH=. alembic revision --autogenerate -m "added week to health table"

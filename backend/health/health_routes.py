@@ -21,13 +21,14 @@ current_user_instance = Depends(get_current_active_user)
 
 
 @health_router.get(
-    "/health/{chapter_id}/year/{year}/month/{month}/question/{question_id}",
+    "/health/{chapter_id}/year/{year}/month/{month}/week/{week}/question/{question_id}",
     tags=["chapter_health"],
 )
 def get_chapter_health(  # noqa: PLR0913
     chapter_id: UUID,
     year: int,
     month: int,
+    week: int,
     question_id: int,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
@@ -54,6 +55,7 @@ def get_chapter_health(  # noqa: PLR0913
         .filter(ChapterHealth.chapter_id == chapter_id)
         .filter(ChapterHealth.year == year)
         .filter(ChapterHealth.month == month)
+        .filter(ChapterHealth.week == week)
         .filter(ChapterHealth.health_question_id == question_id)
         .filter(HealthQuestion.is_deleted.is_(False))
         .filter(ChapterHealth.is_deleted.is_(False))
@@ -88,18 +90,26 @@ def get_chapter_health_by_section(
     """
     check_admin(current_user)
     periods: list[dict] = [
-        {"year": 2024, "month": 4},
-        {"year": 2024, "month": 5},
-        {"year": 2024, "month": 6},
-        {"year": 2024, "month": 7},
-        {"year": 2024, "month": 8},
-        {"year": 2024, "month": 9},
-        {"year": 2024, "month": 10},
-        {"year": 2024, "month": 11},
-        {"year": 2024, "month": 12},
-        {"year": 2025, "month": 1},
-        {"year": 2025, "month": 2},
-        {"year": 2025, "month": 3},
+        {"year": 2024, "month": 6, "week": 1},
+        {"year": 2024, "month": 6, "week": 3},
+        {"year": 2024, "month": 7, "week": 1},
+        {"year": 2024, "month": 7, "week": 3},
+        {"year": 2024, "month": 8, "week": 1},
+        {"year": 2024, "month": 8, "week": 3},
+        {"year": 2024, "month": 9, "week": 1},
+        {"year": 2024, "month": 9, "week": 3},
+        {"year": 2024, "month": 10, "week": 1},
+        {"year": 2024, "month": 10, "week": 3},
+        {"year": 2024, "month": 11, "week": 1},
+        {"year": 2024, "month": 11, "week": 3},
+        {"year": 2024, "month": 12, "week": 1},
+        {"year": 2024, "month": 12, "week": 3},
+        {"year": 2025, "month": 1, "week": 1},
+        {"year": 2025, "month": 1, "week": 3},
+        {"year": 2025, "month": 2, "week": 1},
+        {"year": 2025, "month": 2, "week": 3},
+        {"year": 2025, "month": 3, "week": 1},
+        {"year": 2025, "month": 3, "week": 3},
     ]
 
     questions: list[HealthQuestion] = (
@@ -116,6 +126,7 @@ def get_chapter_health_by_section(
                 .filter(ChapterHealth.chapter_id == chapter_id)
                 .filter(ChapterHealth.year == period["year"])
                 .filter(ChapterHealth.month == period["month"])
+                .filter(ChapterHealth.week == period["week"])
                 .filter(ChapterHealth.health_question_id == question.id)
                 .filter(ChapterHealth.is_deleted.is_(False))
                 .order_by(ChapterHealth.created_date.desc())
@@ -133,13 +144,14 @@ def get_chapter_health_by_section(
 
 
 @health_router.get(
-    "/health/zone/{zone}/year/{year}/month/{month}/section/{section_id}",
+    "/health/zone/{zone}/year/{year}/month/{month}/week/{week}/section/{section_id}",
     tags=["chapter_health"],
 )
 def get_chapter_health_by_section_and_period(  # noqa: PLR0913
     zone: str,
     year: int,
     month: int,
+    week: int,
     section_id: int,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
@@ -188,6 +200,7 @@ def get_chapter_health_by_section_and_period(  # noqa: PLR0913
                 .filter(ChapterHealth.chapter_id == chapter.id)
                 .filter(ChapterHealth.year == year)
                 .filter(ChapterHealth.month == month)
+                .filter(ChapterHealth.week == week)
                 .filter(ChapterHealth.is_deleted.is_(False))
                 .filter(ChapterHealth.health_question_id == question.id)
                 .order_by(ChapterHealth.created_date.desc())
@@ -259,6 +272,7 @@ def update_chapter_health(
     check_admin(current_user)
     year = data.pop("year")
     month = data.pop("month")
+    week = data.pop("week")
 
     for question, score in data.items():
         db_question: HealthQuestion = (
@@ -279,6 +293,7 @@ def update_chapter_health(
             .filter(ChapterHealth.chapter_id == chapter_id)
             .filter(ChapterHealth.year == year)
             .filter(ChapterHealth.month == month)
+            .filter(ChapterHealth.week == week)
             .filter(ChapterHealth.health_question_id == db_question.id)
             .filter(ChapterHealth.is_deleted.is_(False))
             .order_by(ChapterHealth.created_date.desc())
@@ -369,6 +384,7 @@ def get_questions(
     return [
         {"field": "year", "header": "year", "rag_guide": None},
         {"field": "month", "header": "month", "rag_guide": None},
+        {"field": "week", "header": "week", "rag_guide": None},
     ] + [
         {
             "field": str(question.id),
@@ -462,13 +478,14 @@ def get_section(
 
 
 @health_router.get(
-    "/health/{chapter_id}/year/{year}/month/{month}/average",
+    "/health/{chapter_id}/year/{year}/month/{month}/week/{week}/average",
     tags=["chapter_health"],
 )
 def get_average_chapter_health(
     chapter_id: UUID,
     year: int,
     month: int,
+    week: int,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
@@ -513,6 +530,7 @@ def get_average_chapter_health(
                 .filter(ChapterHealth.chapter_id == chapter_id)
                 .filter(ChapterHealth.year == year)
                 .filter(ChapterHealth.month == month)
+                .filter(ChapterHealth.week == week)
                 .filter(ChapterHealth.is_deleted.is_(False))
                 .filter(ChapterHealth.health_question_id == question.id)
                 .order_by(ChapterHealth.created_date.desc())
@@ -539,13 +557,14 @@ def get_average_chapter_health(
 
 
 @health_router.get(
-    "/health/{chapter_id}/year/{year}/month/{month}/comments",
+    "/health/{chapter_id}/year/{year}/month/{month}/week/{week}/comments",
     tags=["chapter_health"],
 )
 def get_comments_chapter_health(
     chapter_id: UUID,
     year: int,
     month: int,
+    week: int,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
@@ -587,6 +606,7 @@ def get_comments_chapter_health(
                 .filter(ChapterHealth.chapter_id == chapter_id)
                 .filter(ChapterHealth.year == year)
                 .filter(ChapterHealth.month == month)
+                .filter(ChapterHealth.week == week)
                 .filter(ChapterHealth.is_deleted.is_(False))
                 .filter(ChapterHealth.health_question_id == question.id)
                 .order_by(ChapterHealth.created_date.desc())
@@ -647,6 +667,7 @@ def get_chapter_latest_health(
                 .filter(ChapterHealth.is_deleted.is_(False))
                 .order_by(ChapterHealth.year.desc())
                 .order_by(ChapterHealth.month.desc())
+                .order_by(ChapterHealth.week.desc())
                 .first()
             )
 
