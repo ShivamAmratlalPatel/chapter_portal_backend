@@ -18,6 +18,7 @@ from .committees.committee_routes import committee_router
 
 from .config import CORS_ORIGINS
 from .health.health_routes import health_router
+from .meetings.meetings_routes import meetings_router
 from .middleware import ContentSizeLimitMiddleware
 from .updates.update_routes import update_router
 from .users.users_routes import users_router
@@ -71,6 +72,7 @@ app.include_router(allocations_router)
 app.include_router(chapters_router)
 app.include_router(committee_router)
 app.include_router(health_router)
+app.include_router(meetings_router)
 app.include_router(update_router)
 app.include_router(users_router)
 app.include_router(visit_router)

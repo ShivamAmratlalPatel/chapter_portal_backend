@@ -20,6 +20,11 @@ from backend.health.health_models import (  # noqa: F401
     HealthQuestion,
     Section,
 )
+from backend.meetings.meetings_models import (  # noqa: F401
+    MatrixMeeting,
+    ZonalTeamMeeting,
+    SectionMeeting,
+)
 from backend.membership.membership_models import MembershipLog  # noqa: F401
 from backend.updates.updates_models import ChapterUpdate, SectionUpdate  # noqa: F401
 from backend.users.users_models import User, UserType  # noqa: F401
