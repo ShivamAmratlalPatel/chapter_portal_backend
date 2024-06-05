@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 
 from backend.chapters.chapters_routes import chapters_router
+from .actions.actions_routes import actions_router
 from .allocations.allocation_routes import allocations_router
 from .committees.committee_routes import committee_router
 
@@ -65,6 +66,7 @@ app.add_middleware(
 )
 app.add_middleware(ContentSizeLimitMiddleware, max_content_size=10_000_000)
 
+app.include_router(actions_router)
 app.include_router(allocations_router)
 app.include_router(chapters_router)
 app.include_router(committee_router)

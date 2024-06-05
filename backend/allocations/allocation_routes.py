@@ -13,7 +13,6 @@ from backend.allocations.allocation_schemas import AllocationCreate, AllocationR
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
-from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
 from backend.utils import object_to_dict, generate_uuid
 
@@ -103,6 +102,8 @@ def update_allocation(
 
     allocation_instance.section_id = allocation.section_id
     allocation_instance.chapter_id = allocation.chapter_id
+
+    db.add(allocation_instance)
     db.commit()
 
     return JSONResponse(

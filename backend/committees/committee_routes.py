@@ -100,6 +100,8 @@ def update_committee(
 
     for field, value in committee.dict().items():
         setattr(committee_db, field, value)
+
+    db.add(committee_db)
     db.commit()
 
     return JSONResponse(
