@@ -8,12 +8,17 @@ from starlette import status
 
 from backend.helpers import get_db
 from backend.actions.actions_models import Action
-from backend.actions.actions_schemas import ActionCreate, ActionRead, ActionUpdate
+from backend.actions.actions_schemas import (
+    ActionCreate,
+    ActionRead,
+    ActionUpdate,
+    Assignee,
+)
 
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
-from backend.users.users_models import User
+from backend.users.users_models import User, UserType
 from backend.users.users_schemas import UserBase
 from backend.utils import object_to_dict, generate_uuid
 
@@ -92,6 +97,7 @@ def read_action(
         )
 
     return JSONResponse(
+        status_code=status.HTTP_200_OK,
         content=object_to_dict(ActionRead.model_validate(action)),
     )
 
@@ -142,6 +148,7 @@ def update_action(
     db.commit()
 
     return JSONResponse(
+        status_code=status.HTTP_200_OK,
         content=object_to_dict(ActionRead.model_validate(action_instance)),
     )
 
@@ -149,12 +156,13 @@ def update_action(
 @actions_router.delete(
     "/action/{action_id}",
     tags=["actions"],
+    status_code=status.HTTP_204_NO_CONTENT,
 )
 def delete_action(
     action_id: UUID,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
-) -> JSONResponse:
+) -> None:
     """Delete an action."""
     check_admin(current_user)
 
@@ -171,9 +179,7 @@ def delete_action(
     db.add(action)
     db.commit()
 
-    return JSONResponse(
-        status_code=status.HTTP_204_NO_CONTENT,
-    )
+    return
 
 
 @actions_router.get(
@@ -198,6 +204,7 @@ def read_actions_by_chapter(
     )
 
     return JSONResponse(
+        status_code=status.HTTP_200_OK,
         content=[
             object_to_dict(ActionRead.model_validate(action)) for action in actions
         ],
@@ -226,6 +233,7 @@ def read_actions_by_section(
     )
 
     return JSONResponse(
+        status_code=status.HTTP_200_OK,
         content=[
             object_to_dict(ActionRead.model_validate(action)) for action in actions
         ],
@@ -254,7 +262,44 @@ def read_my_actions(
     )
 
     return JSONResponse(
+        status_code=status.HTTP_200_OK,
         content=[
             object_to_dict(ActionRead.model_validate(action)) for action in actions
+        ],
+    )
+
+
+@actions_router.get(
+    "/actions/assignees",
+    response_model=list[Assignee],
+    tags=["actions"],
+)
+def get_assignees(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+):
+    check_admin(current_user)
+
+    admin_user: UserType | None = (
+        db.query(UserType).filter(UserType.name == "admin").first()
+    )
+
+    if admin_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Admin user not found",
+        )
+
+    assignees: list[User] = (
+        db.query(User)
+        .filter(User.is_deleted.is_(False))
+        .filter(User.user_type_id == admin_user.id)
+        .order_by(User.full_name.asc())
+    )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=[
+            object_to_dict(Assignee.model_validate(assignee)) for assignee in assignees
         ],
     )

@@ -76,3 +76,14 @@ class ActionRead(ActionBase):
             "completed_date": datetime_now().date(),
         },
     )
+
+
+class Assignee(BaseModel):
+    full_name: str | None = None
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "full_name": "Full Name",
+        },
+    )
