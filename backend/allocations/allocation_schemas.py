@@ -44,6 +44,7 @@ class AllocationRead(AllocationBase):
     id: UUID
     user_name: str
     section_name: str
+    chapter_name: str
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -52,5 +53,6 @@ class AllocationRead(AllocationBase):
             "id": generate_uuid(),
             "user_name": "User Name",
             "section_name": "Section Name",
+            "chapter_name": "Chapter Name",
         },
     )

@@ -66,3 +66,8 @@ class Allocation(Base):
     def section_name(self: "Allocation") -> str:
         """Get the section's name."""
         return self.section.name
+
+    @property
+    def chapter_name(self: "Allocation") -> str:
+        """Get the chapter's name."""
+        return self.chapter.name

@@ -51,6 +51,7 @@ class CommitteeRead(CommitteeBase):
 
     id: UUID
     natcom_buddy_name: str | None = None
+    chapter_name: str | None = None
 
     model_config = ConfigDict(
         from_attributes=True,

@@ -140,6 +140,7 @@ def update_action(
     action_instance.section_id = action.section_id
     action_instance.chapter_id = action.chapter_id
     action_instance.note = action.note
+    print(action.due_date)
     action_instance.due_date = action.due_date
     action_instance.assignee_id = assignee.id
     action_instance.completed_date = action.completed_date

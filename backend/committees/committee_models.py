@@ -101,3 +101,8 @@ class CommitteeMember(Base):
     def natcom_buddy_name(self: "CommitteeMember") -> str:
         """Get the chapter buddy's name."""
         return self.chapter_buddy.full_name
+
+    @property
+    def chapter_name(self: "CommitteeMember") -> str:
+        """Get the chapter name."""
+        return self.chapter.name

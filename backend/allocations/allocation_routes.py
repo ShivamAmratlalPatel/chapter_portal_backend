@@ -193,3 +193,31 @@ def read_allocations_by_chapter(
             for allocation in allocations
         ],
     )
+
+
+@allocations_router.get(
+    "/allocations/me",
+    response_model=list[AllocationRead],
+    tags=["allocations"],
+)
+def read_my_allocations(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> JSONResponse:
+    """Read my allocations."""
+    check_admin(current_user)
+    user: User = get_user_by_user_base(current_user, db)
+
+    allocations: list[Allocation] = (
+        db.query(Allocation)
+        .filter_by(user_id=user.id)
+        .filter_by(is_deleted=False)
+        .all()
+    )
+
+    return JSONResponse(
+        content=[
+            object_to_dict(AllocationRead.model_validate(allocation))
+            for allocation in allocations
+        ],
+    )

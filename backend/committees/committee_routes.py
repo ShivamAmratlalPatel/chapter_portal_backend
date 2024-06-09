@@ -195,7 +195,7 @@ def read_committees_by_chapter(
 
 
 @committee_router.get(
-    "/committee/chapter_buddy",
+    "/committee/chapter_buddy/me",
     response_model=list[CommitteeRead],
     tags=["committees"],
 )
@@ -210,7 +210,7 @@ def read_committees_by_chapter_buddy(
 
     committees: list[CommitteeMember] = (
         db.query(CommitteeMember)
-        .filter_by(chapter_buddy_id=user.id)
+        .filter_by(natcom_buddy_id=user.id)
         .filter_by(is_deleted=False)
         .all()
     )
