@@ -36,6 +36,8 @@ class CommitteeBase(BaseModel):
 class CommitteeCreate(CommitteeBase):
     """Create Committee Schema"""
 
+    natcom_buddy_name: str | None = None
+
     model_config = ConfigDict(
         from_attributes=True,
         json_schema_extra={
@@ -48,11 +50,13 @@ class CommitteeRead(CommitteeBase):
     """Read Committee Schema"""
 
     id: UUID
+    natcom_buddy_name: str | None = None
 
     model_config = ConfigDict(
         from_attributes=True,
         json_schema_extra={
             **CommitteeBase.model_config["json_schema_extra"],
             "id": generate_uuid(),
+            "natcom_buddy_name": "Chapter Buddy Name",
         },
     )

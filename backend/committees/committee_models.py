@@ -49,7 +49,14 @@ class CommitteeMember(Base):
         ),
     )
 
+    natcom_buddy_id = Column(
+        pg.UUID(as_uuid=True),
+        ForeignKey("users.id"),
+        nullable=True,
+    )
+
     chapter = relationship("Chapter")
+    chapter_buddy = relationship("User")
 
     @property
     def is_current(self: "CommitteeMember") -> bool:
@@ -89,3 +96,8 @@ class CommitteeMember(Base):
 
         """
         return self.commencement_date > datetime_now().date()
+
+    @property
+    def natcom_buddy_name(self: "CommitteeMember") -> str:
+        """Get the chapter buddy's name."""
+        return self.chapter_buddy.full_name

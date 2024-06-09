@@ -16,7 +16,9 @@ from backend.committees.commitee_schemas import (
 )
 
 from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
+from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
 from backend.utils import object_to_dict, generate_uuid
 
@@ -45,7 +47,22 @@ def create_committee(
             detail="Chapter not found",
         )
 
-    committee = CommitteeMember(id=generate_uuid(), **committee.dict())
+    chapter_buddy: User | None = (
+        db.query(User)
+        .filter(User.full_name == committee.natcom_buddy_name)
+        .order_by(User.created_date.desc())
+        .first()
+    )
+
+    if chapter_buddy is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Assignee not found",
+        )
+
+    committee = CommitteeMember(
+        id=generate_uuid(), **committee.dict(), chapter_buddy_id=chapter_buddy.id
+    )
     db.add(committee)
     db.commit()
 
@@ -98,8 +115,23 @@ def update_committee(
             detail="Committee not found",
         )
 
+    chapter_buddy: User | None = (
+        db.query(User)
+        .filter(User.full_name == committee.natcom_buddy_name)
+        .order_by(User.created_date.desc())
+        .first()
+    )
+
+    if chapter_buddy is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Assignee not found",
+        )
+
     for field, value in committee.dict().items():
         setattr(committee_db, field, value)
+
+    committee_db.natcom_buddy_id = chapter_buddy.id
 
     db.add(committee_db)
     db.commit()
@@ -142,11 +174,43 @@ def delete_committee(
 def read_committees_by_chapter(
     chapter_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Read committees by chapter."""
-    committees = (
+    check_admin(current_user)
+
+    committees: list[CommitteeMember] = (
         db.query(CommitteeMember)
         .filter_by(chapter_id=chapter_id)
+        .filter_by(is_deleted=False)
+        .all()
+    )
+
+    return JSONResponse(
+        content=[
+            object_to_dict(CommitteeRead.model_validate(committee), format_date=True)
+            for committee in committees
+        ],
+    )
+
+
+@committee_router.get(
+    "/committee/chapter_buddy",
+    response_model=list[CommitteeRead],
+    tags=["committees"],
+)
+def read_committees_by_chapter_buddy(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> JSONResponse:
+    """Read committees by chapter buddy."""
+    check_admin(current_user)
+
+    user = get_user_by_user_base(current_user, db)
+
+    committees: list[CommitteeMember] = (
+        db.query(CommitteeMember)
+        .filter_by(chapter_buddy_id=user.id)
         .filter_by(is_deleted=False)
         .all()
     )

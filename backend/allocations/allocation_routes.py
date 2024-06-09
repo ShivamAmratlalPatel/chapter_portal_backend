@@ -13,6 +13,7 @@ from backend.allocations.allocation_schemas import AllocationCreate, AllocationR
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
+from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
 from backend.utils import object_to_dict, generate_uuid
 
@@ -35,12 +36,24 @@ def create_allocation(
     """Create an allocation."""
     check_admin(current_user)
 
-    user = get_user_by_user_base(current_user, db)
+    assignee: User | None = (
+        db.query(User)
+        .filter(User.full_name == allocation.user_name)
+        .order_by(User.created_date.desc())
+        .first()
+    )
+
+    if assignee is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Assignee not found",
+        )
 
     allocation = Allocation(
         id=generate_uuid(),
-        **allocation.dict(),
-        user_id=user.id,
+        section_id=allocation.section_id,
+        chapter_id=allocation.chapter_id,
+        user_id=assignee.id,
     )
 
     db.add(allocation)
@@ -100,8 +113,22 @@ def update_allocation(
             detail="Allocation not found",
         )
 
+    assignee: User | None = (
+        db.query(User)
+        .filter(User.full_name == allocation.user_name)
+        .order_by(User.created_date.desc())
+        .first()
+    )
+
+    if assignee is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Assignee not found",
+        )
+
     allocation_instance.section_id = allocation.section_id
     allocation_instance.chapter_id = allocation.chapter_id
+    allocation_instance.user_id = assignee.id
 
     db.add(allocation_instance)
     db.commit()

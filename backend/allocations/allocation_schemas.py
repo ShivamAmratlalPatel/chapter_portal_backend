@@ -27,10 +27,13 @@ class AllocationBase(BaseModel):
 class AllocationCreate(AllocationBase):
     """Allocation Create"""
 
+    user_name: str
+
     model_config = ConfigDict(
         from_attributes=True,
         json_schema_extra={
             **AllocationBase.model_config["json_schema_extra"],
+            "user_name": "User Name",
         },
     )
 
