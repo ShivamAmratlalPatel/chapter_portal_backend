@@ -61,7 +61,15 @@ def create_committee(
         )
 
     committee = CommitteeMember(
-        id=generate_uuid(), **committee.dict(), chapter_buddy_id=chapter_buddy.id
+        id=generate_uuid(),
+        name=committee.name,
+        chapter_id=chapter.id,
+        position=committee.position,
+        email=committee.email,
+        phone=committee.phone,
+        commencement_date=committee.commencement_date,
+        conclusion_date=committee.conclusion_date,
+        natcom_buddy_id=chapter_buddy.id,
     )
     db.add(committee)
     db.commit()
