@@ -136,8 +136,13 @@ def update_committee(
             detail="Assignee not found",
         )
 
-    for field, value in committee.dict().items():
-        setattr(committee_db, field, value)
+    committee_db.name = committee.name
+    committee_db.chapter_id = committee.chapter_id
+    committee_db.position = committee.position
+    committee_db.email = committee.email
+    committee_db.phone = committee.phone
+    committee_db.commencement_date = committee.commencement_date
+    committee_db.conclusion_date = committee.conclusion_date
 
     committee_db.natcom_buddy_id = chapter_buddy.id
 
