@@ -77,7 +77,7 @@ def post_user(user_create: UserCreate, db: Session = db_session) -> JSONResponse
         full_name=user_create.full_name,
         hashed_password=get_password_hash(user_create.password),
         user_type_id=admin_user_id,
-        is_deleted=False,
+        is_deleted=True,
     )
     db.add(user)
     db.commit()
@@ -157,7 +157,7 @@ def post_user_chapter(
         hashed_password=get_password_hash(user_create.password),
         user_type_id=chapter_type_id,
         chapter_id=chapter.id,
-        is_deleted=False,
+        is_deleted=True,
     )
     db.add(user)
     db.commit()
