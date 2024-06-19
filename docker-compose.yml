@@ -31,4 +31,4 @@ services:
       - "5432:5432"
 
 networks:
-    nhsf_postgres_network:
+  nhsf_postgres_network:
