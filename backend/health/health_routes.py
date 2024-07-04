@@ -312,6 +312,7 @@ def update_chapter_health(
                 chapter_id=chapter_id,
                 year=year,
                 month=month,
+                week=week,
                 health_question_id=db_question.id,
                 score=score if score and score.isdigit() else None,
                 comments=score if score is not None and not score.isdigit() else None,
