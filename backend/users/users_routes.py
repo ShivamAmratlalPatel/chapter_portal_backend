@@ -226,3 +226,24 @@ def change_password(
     db.add(user)
 
     db.commit()
+
+
+@users_router.get(
+    "/users/deactivate_all",
+    tags=["users"],
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def deactivate_all_users(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> None:
+    """Deactivate all users."""
+    check_admin(current_user)
+    users = db.query(User).all()
+
+    for user in users:
+        user.is_deleted = True
+
+    db.commit()
+
+    return
