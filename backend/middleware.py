@@ -1,4 +1,9 @@
-"""Middleware for the backend application."""
+"""
+Middleware for the backend application.
+
+This module contains the middleware for the backend application. The only middleware is the ContentSizeLimitMiddleware,
+which limits the size of the content that can be sent to the application.
+"""
 from starlette.responses import Response
 from starlette.status import HTTP_413_REQUEST_ENTITY_TOO_LARGE
 

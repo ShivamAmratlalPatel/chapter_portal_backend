@@ -38,9 +38,7 @@ def downgrade() -> None:
 
 def merge_upgrade_ops() -> None:
     """Merge upgrade operations from multiple branches."""
-    pass
 
 
 def merge_downgrade_ops() -> None:
     """Merge downgrade operations from multiple branches."""
-    pass

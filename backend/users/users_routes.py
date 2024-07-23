@@ -77,7 +77,7 @@ def post_user(user_create: UserCreate, db: Session = db_session) -> JSONResponse
         full_name=user_create.full_name,
         hashed_password=get_password_hash(user_create.password),
         user_type_id=admin_user_id,
-        is_deleted=False,
+        is_deleted=True,
     )
     db.add(user)
     db.commit()
@@ -157,7 +157,7 @@ def post_user_chapter(
         hashed_password=get_password_hash(user_create.password),
         user_type_id=chapter_type_id,
         chapter_id=chapter.id,
-        is_deleted=False,
+        is_deleted=True,
     )
     db.add(user)
     db.commit()
@@ -180,7 +180,8 @@ def get_me(
 def get_all_users(
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
-):
+) -> list[UserBase]:
+    """Get all users."""
     check_admin(current_user)
     users = db.query(User).all()
 
@@ -192,7 +193,8 @@ def edit_user(
     full_name: str,
     db: Session = db_session,
     current_user: UserBase = current_user_instance,
-):
+) -> None:
+    """Edit user."""
     check_admin(current_user)
     user: User = db.query(User).filter(User.email == current_user.email).first()
 
@@ -206,12 +208,17 @@ def edit_user(
     db.commit()
 
 
-@users_router.put("/users/{user_id}/change_password", tags=["users"])
+@users_router.put(
+    "/users/{user_id}/change_password",
+    tags=["users"],
+    status_code=status.HTTP_204_NO_CONTENT,
+)
 def change_password(
     user_id: UUID,
     password: str,
     db: Session = db_session,
-):
+) -> None:
+    """Change password."""
     user: User = db.get(User, user_id)
 
     user.hashed_password = get_password_hash(password)
@@ -219,3 +226,24 @@ def change_password(
     db.add(user)
 
     db.commit()
+
+
+@users_router.get(
+    "/users/deactivate_all",
+    tags=["users"],
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def deactivate_all_users(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> None:
+    """Deactivate all users."""
+    check_admin(current_user)
+    users = db.query(User).all()
+
+    for user in users:
+        user.is_deleted = True
+
+    db.commit()
+
+    return

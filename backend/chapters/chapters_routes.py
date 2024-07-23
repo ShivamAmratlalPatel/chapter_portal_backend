@@ -15,6 +15,9 @@ from backend.commands.get_paginated_result import GetPaginatedResult
 from backend.health.health_models import Section
 from backend.helpers import get_db
 from backend.schemas import PaginationResult, SortBy
+from backend.users.users_commands.check_admin import check_admin
+from backend.users.users_commands.get_users import get_current_active_user
+from backend.users.users_schemas import UserBase
 from backend.utils import convert_list_to_list, object_to_dict
 
 if TYPE_CHECKING:
@@ -23,6 +26,7 @@ if TYPE_CHECKING:
 chapters_router = APIRouter()
 
 db_session = Depends(get_db)
+current_user_instance = Depends(get_current_active_user)
 
 
 @chapters_router.post(
@@ -49,8 +53,10 @@ db_session = Depends(get_db)
 def create_chapter(
     chapter_details: ChapterCreate,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Create a chapter."""
+    check_admin(current_user)
     try:
         chapter = Chapter(**chapter_details.model_dump())
         db.add(chapter)
@@ -91,8 +97,17 @@ def create_chapter(
 def get_chapter(
     chapter_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Get a chapter."""
+    if current_user.chapter_id is not None:
+        if current_user.chapter_id != chapter_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User does not have access to this chapter",
+            )
+    else:
+        check_admin(current_user)
     chapter = db.query(Chapter).filter(Chapter.id == chapter_id).first()
     if not chapter:
         raise HTTPException(
@@ -114,8 +129,10 @@ def list_chapters(  # noqa: PLR0913
     filter_by: str | None = None,
     sort_by: SortBy | None = SortBy.date_asc,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> PaginationResult:
     """Get all chapters."""
+    check_admin(current_user)
     pagination = GetPaginatedResult()
 
     filters = []
@@ -173,8 +190,17 @@ def update_chapter(
     chapter_id: UUID,
     chapter_details: ChapterUpdate,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Update a chapter."""
+    if current_user.chapter_id is not None:
+        if current_user.chapter_id != chapter_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User does not have access to this chapter",
+            )
+    else:
+        check_admin(current_user)
     chapter = db.query(Chapter).filter(Chapter.id == chapter_id).first()
     if not chapter:
         raise HTTPException(
@@ -215,8 +241,10 @@ def update_chapter(
 def delete_chapter(
     chapter_id: UUID,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Delete a chapter."""
+    check_admin(current_user)
     chapter = db.query(Chapter).filter(Chapter.id == chapter_id).first()
     if not chapter:
         raise HTTPException(
@@ -237,8 +265,10 @@ def delete_chapter(
 )
 def list_all_chapters(
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Get all chapters."""
+    check_admin(current_user)
     zones: list[Row] = (
         db.query(Chapter.zone)
         .filter(Chapter.is_deleted.is_(False))
@@ -265,13 +295,13 @@ def list_all_chapters(
                         "label": f"{zone[0]} Home",
                         "icon": "pi pi-fw pi-home",
                         "to": f"/internal/health/zone/{zone[0]}",
-                    }
+                    },
                 ]
                 + [
                     {
                         "label": chapter.name,
                         "icon": "pi pi-fw pi-id-card",
-                        "to": f"/internal/health/{chapter.id}",
+                        "to": f"/internal/chapters/{chapter.id}",
                     }
                     for chapter in chapters
                 ],
@@ -293,7 +323,7 @@ def list_all_chapters(
             {
                 "label": team.name,
                 "icon": "pi pi-fw pi-id-card",
-                "to": f"/internal/health/section/{team.id}",
+                "to": f"/internal/section/{team.id}",
             },
         )
 
@@ -343,17 +373,23 @@ def list_all_chapters(
 
 
 @chapters_router.get("/zones", tags=["zones"])
-def get_zones(db: Session = db_session) -> JSONResponse:
+def get_zones(
+    db: Session = db_session,
+    current_user: UserBase = current_user_instance,
+) -> JSONResponse:
     """
     Get the zones
 
     Args:
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
+
 
     Returns:
         list[Zone]: The zones
 
     """
+    check_admin(current_user)
     zones: list[Row] = (
         db.query(Chapter.zone)
         .filter(Chapter.is_deleted.is_(False))
@@ -376,6 +412,7 @@ def get_zones(db: Session = db_session) -> JSONResponse:
 def get_chapters_by_zone(
     zone: str,
     db: Session = db_session,
+    current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """
     Get the chapters by zone
@@ -383,11 +420,13 @@ def get_chapters_by_zone(
     Args:
         zone (str): The zone
         db (Session, optional): The database session. Defaults to db_session.
+        current_user (UserBase, optional): The current user. Defaults to current_user_instance.
 
     Returns:
         list[Chapter]: The chapters
 
     """
+    check_admin(current_user)
     chapters: list[Chapter] = (
         db.query(Chapter)
         .filter(Chapter.is_deleted.is_(False))

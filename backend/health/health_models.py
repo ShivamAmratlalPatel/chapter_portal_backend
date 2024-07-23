@@ -14,6 +14,7 @@ class Section(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     is_deleted = Column(Boolean, nullable=False, default=False, server_default="false")
+    icon = Column(String, nullable=True)
 
 
 class HealthQuestion(Base):
@@ -71,6 +72,7 @@ class ChapterHealth(Base):
     comments = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     month = Column(Integer, nullable=True)
+    week = Column(Integer, nullable=True)
 
     created_date = Column(
         DateTime(timezone=True),

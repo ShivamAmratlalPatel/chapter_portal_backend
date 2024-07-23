@@ -1,1 +1,1 @@
-PYTHONPATH=. alembic revision --autogenerate -m "added rag guide to health questions"
+PYTHONPATH=. alembic revision --autogenerate -m "added natcom buddy to committee member table"

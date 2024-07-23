@@ -8,6 +8,8 @@ from alembic import context
 from backend.chapters.chapters_models import Chapter  # noqa: F401
 from backend.committees.committee_models import CommitteeMember  # noqa: F401
 from backend.database import Base
+from backend.actions.actions_models import Action  # noqa: F401
+from backend.allocations.allocation_models import Allocation  # noqa: F401
 from backend.events.event_models import (  # noqa: F401
     ChapterEventAssociation,
     Event,
@@ -23,8 +25,19 @@ from backend.inventory.inventory_models import (  # noqa: F401
     InventoryItem,
     Location,
 )
+from backend.meetings.meetings_models import (  # noqa: F401
+    MatrixMeeting,
+    ZonalTeamMeeting,
+    SectionMeeting,
+)
 from backend.membership.membership_models import MembershipLog  # noqa: F401
-from backend.users.users_models import UserType, User  # noqa: F401
+from backend.updates.updates_models import ChapterUpdate, SectionUpdate  # noqa: F401
+from backend.users.users_models import User, UserType  # noqa: F401
+from backend.visits.visits_models import (  # noqa: F401
+    ChapterVisitAssociation,
+    Visit,
+    VisitCategory,
+)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
