@@ -1,9 +1,9 @@
 """
-added inventory tables
+added inventory models
 
-Revision ID: 8b67672138a7
-Revises: b1009b09c070
-Created Date: 2024-05-26 15:44:02.124072+01:00
+Revision ID: 8a268eb75b0e
+Revises: f90f193cc111
+Created Date: 2024-07-23 22:48:49.873163+01:00
 
 """
 import sqlalchemy as sa
@@ -11,8 +11,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "8b67672138a7"
-down_revision = "b1009b09c070"
+revision = "8a268eb75b0e"
+down_revision = "f90f193cc111"
 branch_labels = None
 depends_on = None
 
