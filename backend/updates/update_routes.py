@@ -19,7 +19,7 @@ from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_schemas import UserBase
-from backend.utils import object_to_dict, generate_uuid
+from backend.utils import datetime_now, generate_uuid, object_to_dict
 
 update_router = APIRouter()
 
@@ -50,7 +50,10 @@ def create_chapter_update(
         )
 
     chapter_update = ChapterUpdate(
-        id=generate_uuid(), **chapter_update.dict(), user_id=user.id
+        id=generate_uuid(),
+        created_date=datetime_now(),
+        **chapter_update.dict(),
+        user_id=user.id,
     )
     db.add(chapter_update)
     db.commit()
@@ -163,7 +166,10 @@ def create_section_update(
     check_admin(current_user)
     user = get_user_by_user_base(current_user, db)
     section_update = SectionUpdate(
-        id=generate_uuid(), **section_update.dict(), user_id=user.id
+        id=generate_uuid(),
+        created_date=datetime_now(),
+        **section_update.dict(),
+        user_id=user.id,
     )
     db.add(section_update)
     db.commit()

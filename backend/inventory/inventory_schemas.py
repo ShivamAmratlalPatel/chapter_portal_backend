@@ -24,8 +24,6 @@ class CategoryCreate(BaseModel):
 class CategoryUpdate(CategoryCreate):
     """Category update."""
 
-    pass
-
 
 class CategoryRead(CategoryCreate):
     """Category read."""
@@ -60,8 +58,6 @@ class LocationCreate(BaseModel):
 
 class LocationUpdate(LocationCreate):
     """Location update."""
-
-    pass
 
 
 class LocationRead(LocationCreate):
@@ -125,5 +121,3 @@ class InventoryRead(InventoryCreate):
 
 class InventoryUpdate(InventoryCreate):
     """Inventory update."""
-
-    pass

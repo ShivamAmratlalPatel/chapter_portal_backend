@@ -12,10 +12,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 
 from backend.chapters.chapters_routes import chapters_router
+
 from .actions.actions_routes import actions_router
 from .allocations.allocation_routes import allocations_router
 from .committees.committee_routes import committee_router
-
 from .config import CORS_ORIGINS
 from .health.health_routes import health_router
 from .inventory.inventory_routes import inventory_router

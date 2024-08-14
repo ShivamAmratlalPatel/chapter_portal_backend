@@ -6,7 +6,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from starlette import status
 
-from backend.helpers import get_db
 from backend.actions.actions_models import Action
 from backend.actions.actions_schemas import (
     ActionCreate,
@@ -14,13 +13,13 @@ from backend.actions.actions_schemas import (
     ActionUpdate,
     Assignee,
 )
-
+from backend.helpers import get_db
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_models import User, UserType
 from backend.users.users_schemas import UserBase
-from backend.utils import object_to_dict, generate_uuid
+from backend.utils import datetime_now, generate_uuid, object_to_dict
 
 actions_router = APIRouter()
 
@@ -58,6 +57,7 @@ def create_action(
 
     action = Action(
         id=generate_uuid(),
+        created_date=datetime_now(),
         section_id=action.section_id,
         chapter_id=action.chapter_id,
         note=action.note,
@@ -180,8 +180,6 @@ def delete_action(
     db.add(action)
     db.commit()
 
-    return
-
 
 @actions_router.get(
     "/actions/chapter/{chapter_id}",
@@ -251,7 +249,6 @@ def read_my_actions(
     current_user: UserBase = current_user_instance,
 ) -> JSONResponse:
     """Read my actions."""
-
     user = get_user_by_user_base(current_user, db)
 
     actions: list[Action] = (

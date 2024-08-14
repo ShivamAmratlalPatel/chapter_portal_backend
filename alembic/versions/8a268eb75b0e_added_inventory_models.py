@@ -78,7 +78,10 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_inventory_item_id"), "inventory_item", ["id"], unique=False
+        op.f("ix_inventory_item_id"),
+        "inventory_item",
+        ["id"],
+        unique=False,
     )
     # ### end Alembic commands ###
 
@@ -97,9 +100,7 @@ def downgrade() -> None:
 
 def merge_upgrade_ops() -> None:
     """Merge upgrade operations from multiple branches."""
-    pass
 
 
 def merge_downgrade_ops() -> None:
     """Merge downgrade operations from multiple branches."""
-    pass

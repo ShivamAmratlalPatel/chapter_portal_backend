@@ -9,7 +9,6 @@ from backend.helpers import get_db
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
-from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
 from backend.utils import datetime_now, generate_uuid
 from backend.visits.visits_models import ChapterVisitAssociation, Visit
@@ -154,7 +153,9 @@ def delete_visit(
 
 
 @visit_router.get(
-    "/visits/chapter/{chapter_id}", response_model=list[VisitRead], tags=["visits"]
+    "/visits/chapter/{chapter_id}",
+    response_model=list[VisitRead],
+    tags=["visits"],
 )
 def get_visits_by_chapter(
     chapter_id: UUID,

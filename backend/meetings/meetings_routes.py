@@ -9,27 +9,24 @@ from starlette import status
 from backend.helpers import get_db
 from backend.meetings.meetings_models import (
     MatrixMeeting,
-    ZonalTeamMeeting,
     SectionMeeting,
+    ZonalTeamMeeting,
 )
 from backend.meetings.meetings_schemas import (
     MatrixMeetingCreate,
-    MatrixMeetingUpdate,
     MatrixMeetingRead,
-    ZonalTeamMeetingCreate,
-    ZonalTeamMeetingUpdate,
-    ZonalTeamMeetingRead,
+    MatrixMeetingUpdate,
     SectionMeetingCreate,
-    SectionMeetingUpdate,
     SectionMeetingRead,
+    SectionMeetingUpdate,
+    ZonalTeamMeetingCreate,
+    ZonalTeamMeetingRead,
+    ZonalTeamMeetingUpdate,
 )
-
 from backend.users.users_commands.check_admin import check_admin
-from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
-from backend.users.users_models import User, UserType
 from backend.users.users_schemas import UserBase
-from backend.utils import object_to_dict, generate_uuid
+from backend.utils import datetime_now, generate_uuid, object_to_dict
 
 meetings_router = APIRouter()
 
@@ -52,6 +49,7 @@ def create_matrix_meeting(
 
     meeting = MatrixMeeting(
         id=generate_uuid(),
+        created_date=datetime_now(),
         zone=meeting.zone,
         meeting_date=meeting.meeting_date,
         agenda=meeting.agenda,
@@ -155,8 +153,6 @@ def delete_matrix_meeting(
     meeting.is_deleted = True
     db.commit()
 
-    return
-
 
 @meetings_router.post(
     "/zonal_team_meeting",
@@ -173,6 +169,7 @@ def create_zonal_team_meeting(
 
     meeting = ZonalTeamMeeting(
         id=generate_uuid(),
+        created_date=datetime_now(),
         zone=meeting.zone,
         meeting_date=meeting.meeting_date,
         agenda=meeting.agenda,
@@ -276,8 +273,6 @@ def delete_zonal_team_meeting(
     meeting.is_deleted = True
     db.commit()
 
-    return
-
 
 @meetings_router.post(
     "/section_meeting",
@@ -294,6 +289,7 @@ def create_section_meeting(
 
     meeting = SectionMeeting(
         id=generate_uuid(),
+        created_date=datetime_now(),
         section_id=meeting.section_id,
         meeting_date=meeting.meeting_date,
         agenda=meeting.agenda,
@@ -396,8 +392,6 @@ def delete_section_meeting(
 
     meeting.is_deleted = True
     db.commit()
-
-    return
 
 
 @meetings_router.get(

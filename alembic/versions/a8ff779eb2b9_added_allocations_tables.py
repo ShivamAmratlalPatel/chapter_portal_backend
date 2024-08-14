@@ -35,7 +35,7 @@ def upgrade() -> None:
             "created_date",
             sa.DateTime(timezone=True),
             server_default=sa.text(
-                "timezone('Europe/London', timezone('Europe/London', CURRENT_TIMESTAMP))"
+                "timezone('Europe/London', timezone('Europe/London', CURRENT_TIMESTAMP))",
             ),
             nullable=False,
         ),
@@ -69,9 +69,7 @@ def downgrade() -> None:
 
 def merge_upgrade_ops() -> None:
     """Merge upgrade operations from multiple branches."""
-    pass
 
 
 def merge_downgrade_ops() -> None:
     """Merge downgrade operations from multiple branches."""
-    pass

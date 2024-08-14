@@ -7,20 +7,15 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from backend.chapters.chapters_models import Chapter
-from backend.helpers import get_db
-
+from backend.committees.commitee_schemas import CommitteeCreate, CommitteeRead
 from backend.committees.committee_models import CommitteeMember
-from backend.committees.commitee_schemas import (
-    CommitteeCreate,
-    CommitteeRead,
-)
-
+from backend.helpers import get_db
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_user_by_user_base import get_user_by_user_base
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_models import User
 from backend.users.users_schemas import UserBase
-from backend.utils import object_to_dict, generate_uuid
+from backend.utils import datetime_now, generate_uuid, object_to_dict
 
 committee_router = APIRouter()
 
@@ -62,6 +57,7 @@ def create_committee(
 
     committee = CommitteeMember(
         id=generate_uuid(),
+        created_date=datetime_now(),
         name=committee.name,
         chapter_id=chapter.id,
         position=committee.position,
@@ -98,7 +94,8 @@ def read_committee(
 
     return JSONResponse(
         content=object_to_dict(
-            CommitteeRead.model_validate(committee), format_date=True
+            CommitteeRead.model_validate(committee),
+            format_date=True,
         ),
     )
 
@@ -175,8 +172,6 @@ def delete_committee(
 
     committee.is_deleted = True
     db.commit()
-
-    return
 
 
 @committee_router.get(

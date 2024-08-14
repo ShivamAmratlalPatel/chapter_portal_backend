@@ -7,23 +7,22 @@ from starlette import status
 
 from backend.commands.pagination_commands import calculate_filters, calculate_sort_by
 from backend.helpers import get_db
-from backend.inventory.inventory_models import InventoryItem, Category, Location
+from backend.inventory.inventory_models import Category, InventoryItem, Location
 from backend.inventory.inventory_schemas import (
+    CategoryCreate,
+    CategoryRead,
+    CategoryUpdate,
     InventoryCreate,
     InventoryRead,
-    CategoryRead,
-    CategoryCreate,
-    LocationRead,
-    LocationCreate,
     InventoryUpdate,
+    LocationCreate,
+    LocationRead,
     LocationUpdate,
-    CategoryUpdate,
 )
-
 from backend.users.users_commands.check_admin import check_admin
 from backend.users.users_commands.get_users import get_current_active_user
 from backend.users.users_schemas import UserBase
-from backend.utils import object_to_dict, generate_uuid
+from backend.utils import datetime_now, generate_uuid, object_to_dict
 
 inventory_router = APIRouter()
 
@@ -63,7 +62,7 @@ def list_pagination_inventory(  # noqa: PLR0913
         content={
             "customers": [
                 object_to_dict(
-                    InventoryRead.model_validate(inventory_item).model_dump()
+                    InventoryRead.model_validate(inventory_item).model_dump(),
                 )
                 for inventory_item in query.all()
             ],
@@ -147,7 +146,9 @@ def list_pagination_inventory_category(  # noqa: PLR0913
 
 
 @inventory_router.post(
-    "/inventory/location", tags=["inventory"], response_model=LocationRead
+    "/inventory/location",
+    tags=["inventory"],
+    response_model=LocationRead,
 )
 def create_location(
     location: LocationCreate,
@@ -156,7 +157,11 @@ def create_location(
 ) -> JSONResponse:
     """Create a location."""
     check_admin(current_user)
-    new_location = Location(id=generate_uuid(), name=location.name)
+    new_location = Location(
+        id=generate_uuid(),
+        created_date=datetime_now(),
+        name=location.name,
+    )
 
     db.add(new_location)
     db.commit()
@@ -168,7 +173,9 @@ def create_location(
 
 
 @inventory_router.post(
-    "/inventory/category", tags=["inventory"], response_model=CategoryRead
+    "/inventory/category",
+    tags=["inventory"],
+    response_model=CategoryRead,
 )
 def create_category(
     category: CategoryCreate,
@@ -177,7 +184,11 @@ def create_category(
 ) -> JSONResponse:
     """Create a category."""
     check_admin(current_user)
-    new_category = Category(id=generate_uuid(), name=category.name)
+    new_category = Category(
+        id=generate_uuid(),
+        created_date=datetime_now(),
+        name=category.name,
+    )
 
     db.add(new_category)
     db.commit()
@@ -198,6 +209,7 @@ def create_inventory(
     check_admin(current_user)
     new_inventory = InventoryItem(
         id=generate_uuid(),
+        created_date=datetime_now(),
         name=inventory.name,
         description=inventory.description,
         quantity=inventory.quantity,
@@ -211,13 +223,15 @@ def create_inventory(
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
         content=object_to_dict(
-            InventoryRead.model_validate(new_inventory).model_dump()
+            InventoryRead.model_validate(new_inventory).model_dump(),
         ),
     )
 
 
 @inventory_router.put(
-    "/inventory/{inventory_id}", tags=["inventory"], response_model=InventoryRead
+    "/inventory/{inventory_id}",
+    tags=["inventory"],
+    response_model=InventoryRead,
 )
 def update_inventory(
     inventory_id: str,
@@ -247,13 +261,15 @@ def update_inventory(
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content=object_to_dict(
-            InventoryRead.model_validate(inventory_item).model_dump()
+            InventoryRead.model_validate(inventory_item).model_dump(),
         ),
     )
 
 
 @inventory_router.delete(
-    "/inventory/{inventory_id}", tags=["inventory"], response_model=InventoryRead
+    "/inventory/{inventory_id}",
+    tags=["inventory"],
+    response_model=InventoryRead,
 )
 def delete_inventory(
     inventory_id: str,
@@ -278,13 +294,15 @@ def delete_inventory(
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content=object_to_dict(
-            InventoryRead.model_validate(inventory_item).model_dump()
+            InventoryRead.model_validate(inventory_item).model_dump(),
         ),
     )
 
 
 @inventory_router.put(
-    "/inventory/location/{location_id}", tags=["inventory"], response_model=LocationRead
+    "/inventory/location/{location_id}",
+    tags=["inventory"],
+    response_model=LocationRead,
 )
 def update_location(
     location_id: str,
@@ -314,7 +332,9 @@ def update_location(
 
 
 @inventory_router.delete(
-    "/inventory/location/{location_id}", tags=["inventory"], response_model=LocationRead
+    "/inventory/location/{location_id}",
+    tags=["inventory"],
+    response_model=LocationRead,
 )
 def delete_location(
     location_id: str,
@@ -343,7 +363,9 @@ def delete_location(
 
 
 @inventory_router.put(
-    "/inventory/category/{category_id}", tags=["inventory"], response_model=CategoryRead
+    "/inventory/category/{category_id}",
+    tags=["inventory"],
+    response_model=CategoryRead,
 )
 def update_category(
     category_id: str,
@@ -373,7 +395,9 @@ def update_category(
 
 
 @inventory_router.delete(
-    "/inventory/category/{category_id}", tags=["inventory"], response_model=CategoryRead
+    "/inventory/category/{category_id}",
+    tags=["inventory"],
+    response_model=CategoryRead,
 )
 def delete_category(
     category_id: str,
