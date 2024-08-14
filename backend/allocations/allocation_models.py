@@ -1,5 +1,5 @@
 """Allocation Database Models"""
-from sqlalchemy import Boolean, Column, DateTime, Integer, func, ForeignKey
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, func
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship
 

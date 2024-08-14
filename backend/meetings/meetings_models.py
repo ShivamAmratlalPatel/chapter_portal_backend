@@ -2,12 +2,12 @@
 from sqlalchemy import (
     Boolean,
     Column,
-    DateTime,
     Date,
-    Integer,
-    func,
+    DateTime,
     ForeignKey,
+    Integer,
     String,
+    func,
 )
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship

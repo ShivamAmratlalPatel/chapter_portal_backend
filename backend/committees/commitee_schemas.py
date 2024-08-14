@@ -1,8 +1,8 @@
 """Update Schemas"""
-from datetime import date, datetime
+from datetime import date
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict
 
 from backend.utils import datetime_now, generate_uuid
 from testing.helpers.fake_data import fake_email

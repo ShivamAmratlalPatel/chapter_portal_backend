@@ -1,12 +1,10 @@
 """Allocation Schemas"""
 
-from datetime import date
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from backend.chapters.chapters_schemas import ChapterRead
-from backend.utils import datetime_now, generate_uuid
+from backend.utils import generate_uuid
 
 
 class AllocationBase(BaseModel):

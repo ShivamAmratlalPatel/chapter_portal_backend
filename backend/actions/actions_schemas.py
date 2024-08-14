@@ -5,7 +5,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from backend.utils import generate_uuid, datetime_now
+from backend.utils import datetime_now, generate_uuid
 
 
 class ActionBase(BaseModel):

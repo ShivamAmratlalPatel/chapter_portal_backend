@@ -309,6 +309,7 @@ def update_chapter_health(
         else:
             chapter_health = ChapterHealth(
                 id=generate_uuid(),
+                created_date=datetime_now(),
                 chapter_id=chapter_id,
                 year=year,
                 month=month,
