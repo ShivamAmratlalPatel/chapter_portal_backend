@@ -1,5 +1,5 @@
 """Event Database Models"""
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, func
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, func, Date
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import relationship
 
@@ -41,10 +41,10 @@ class EventType(Base):
     events = relationship("Event", back_populates="event_type")
 
 
-class Event(Base):
-    """Event database model."""
+class EventSubType(Base):
+    """Event Sub Type database model."""
 
-    __tablename__ = "events"
+    __tablename__ = "event_sub_types"
 
     id = Column(
         pg.UUID(as_uuid=True),
@@ -77,7 +77,58 @@ class Event(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
+    event_type = relationship("EventType", back_populates="event_sub_types")
+
+
+class Event(Base):
+    """Event database model."""
+
+    __tablename__ = "events"
+
+    id = Column(
+        pg.UUID(as_uuid=True),
+        primary_key=True,
+        index=True,
+        default=generate_uuid(),
+        server_default=func.uuid_generate_v4(),
+    )
+    name = Column(String, nullable=False)
+    event_type_id = Column(
+        pg.UUID(as_uuid=True),
+        ForeignKey("event_types.id"),
+        nullable=False,
+    )
+    event_sub_type_id = Column(
+        pg.UUID(as_uuid=True),
+        ForeignKey("event_sub_types.id"),
+        nullable=True,
+    )
+    event_date = Column(Date, nullable=False)
+    created_date = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=datetime_now(),
+        server_default=func.timezone(
+            "Europe/London",
+            func.timezone("Europe/London", func.current_timestamp()),
+        ),
+    )
+    is_deleted = Column(Boolean, nullable=False, default=False)
+    last_modified_date = Column(
+        DateTime(timezone=True),
+        onupdate=datetime_now(),
+        server_onupdate=func.timezone(
+            "Europe/London",
+            func.timezone("Europe/London", func.current_timestamp()),
+        ),
+    )
     event_type = relationship("EventType", back_populates="events")
+
+    chapters = relationship(
+        "Chapter",
+        secondary="chapter_event_association",
+        secondaryjoin="and_(Chapter.id == ChapterEventAssociation.chapter_id, ChapterEventAssociation.is_deleted == False, Chapter.is_deleted == False)",
+    )
 
 
 class ChapterEventAssociation(Base):
