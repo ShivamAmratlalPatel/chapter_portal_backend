@@ -94,6 +94,8 @@ def convert_list_to_list(data: list, format_date: bool) -> list:
             result.append(float(value))
         elif isinstance(value, list):
             result.append(convert_list_to_list(value, format_date))
+        elif isinstance(value, BaseModel):
+            result.append(object_to_dict(value, format_date))
         else:
             result.append(value)
     return result
@@ -126,6 +128,8 @@ def convert_dict_to_dict(data: dict, format_date: bool) -> dict:
             result[key] = float(value)
         elif isinstance(value, list):
             result[key] = convert_list_to_list(value, format_date)
+        elif isinstance(value, BaseModel):
+            result[key] = object_to_dict(value, format_date)
         else:
             result[key] = value
     return result
