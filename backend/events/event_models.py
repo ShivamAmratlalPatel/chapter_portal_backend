@@ -121,6 +121,9 @@ class Event(Base):
         ),
     )
 
+    event_type = relationship("EventType")
+    event_sub_type = relationship("EventSubType")
+
 
 
 class ChapterEventAssociation(Base):

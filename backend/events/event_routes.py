@@ -45,6 +45,13 @@ def create_event(
             detail="Event Type not found",
         )
 
+    event_sub_type = db.get(EventSubType, event_details.event_sub_type_id)
+    if event_sub_type is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Event Sub Type not found",
+        )
+
     for chapter_id in event_details.chapter_ids:
         chapter = db.get(Chapter, chapter_id)
         if chapter is None:
@@ -57,6 +64,7 @@ def create_event(
         id=generate_uuid(),
         name=event_details.name,
         event_type_id=event_details.event_type_id,
+        event_sub_type_id=event_details.event_sub_type_id,
         event_date=event_details.event_date,
         created_date=datetime_now(),
     )
@@ -73,6 +81,7 @@ def create_event(
             is_deleted=False
         )
         db.add(chapter_event_association)
+        db.commit()
 
 
 
