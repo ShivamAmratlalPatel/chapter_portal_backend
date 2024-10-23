@@ -38,7 +38,6 @@ class EventType(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
-    events = relationship("Event", back_populates="event_type")
 
 
 class EventSubType(Base):
@@ -77,7 +76,6 @@ class EventSubType(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
-    event_type = relationship("EventType", back_populates="event_sub_types")
 
 
 class Event(Base):
@@ -122,13 +120,7 @@ class Event(Base):
             func.timezone("Europe/London", func.current_timestamp()),
         ),
     )
-    event_type = relationship("EventType", back_populates="events")
 
-    chapters = relationship(
-        "Chapter",
-        secondary="chapter_event_association",
-        secondaryjoin="and_(Chapter.id == ChapterEventAssociation.chapter_id, ChapterEventAssociation.is_deleted == False, Chapter.is_deleted == False)",
-    )
 
 
 class ChapterEventAssociation(Base):
