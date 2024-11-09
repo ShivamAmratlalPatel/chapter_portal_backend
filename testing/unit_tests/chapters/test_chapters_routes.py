@@ -113,7 +113,7 @@ class TestPostChapter:
         response = client.post("/chapter", json=data)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
         assert response.json()["detail"][0]["msg"] == (
-            "Input should be 'London','South','North' or 'Central'"
+            "Input should be 'London','South','North' or 'Central' or 'School"
         )
         assert response.json()["detail"][0]["type"] == "enum"
         assert response.json()["detail"][0]["loc"] == ["body", "zone"]

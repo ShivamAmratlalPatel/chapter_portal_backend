@@ -31,7 +31,7 @@ def fake_name() -> str:
 
 def fake_zone() -> str:
     """Return a fake zone."""
-    return choice(["North", "South", "London", "Central"])
+    return choice(["North", "South", "London", "Central", "School"])
 
 
 def fake_email() -> str:

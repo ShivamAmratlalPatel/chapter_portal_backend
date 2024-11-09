@@ -17,6 +17,7 @@ class ZoneEnum(str, Enum):
     south = "South"
     north = "North"
     central = "Central"
+    school = "School"
 
     __slots__ = ()
 
