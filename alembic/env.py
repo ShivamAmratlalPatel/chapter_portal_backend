@@ -20,6 +20,11 @@ from backend.health.health_models import (  # noqa: F401
     HealthQuestion,
     Section,
 )
+from backend.inventory.inventory_models import (  # noqa: F401
+    Category,
+    InventoryItem,
+    Location,
+)
 from backend.meetings.meetings_models import (  # noqa: F401
     MatrixMeeting,
     SectionMeeting,

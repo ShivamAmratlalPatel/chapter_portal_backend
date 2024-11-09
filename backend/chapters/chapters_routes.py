@@ -332,16 +332,39 @@ def list_all_chapters(
         content=convert_list_to_list(
             [
                 {
-                    "label": "Chapters",
+                    "label": "Health",
                     "icon": "pi pi-fw pi-id-card",
-                    "to": "/health",
-                    "items": output,
+                    "to": "/internal/health",
+                    "items": [
+                        {
+                            "label": "Chapters",
+                            "icon": "pi pi-fw pi-id-card",
+                            "to": "/internal/health",
+                            "items": output,
+                        },
+                        {
+                            "label": "Teams",
+                            "icon": "pi pi-fw pi-id-card",
+                            "to": "/health",
+                            "items": teams_output,
+                        },
+                    ],
                 },
                 {
-                    "label": "Teams",
+                    "label": "Inventory",
                     "icon": "pi pi-fw pi-id-card",
-                    "to": "/health",
-                    "items": teams_output,
+                    "items": [
+                        {
+                            "label": "Items",
+                            "icon": "pi pi-fw pi-id-card",
+                            "to": "/internal/inventory",
+                        },
+                        {
+                            "label": "Categories",
+                            "icon": "pi pi-fw pi-id-card",
+                            "to": "/internal/inventory/categories",
+                        },
+                    ],
                 },
             ],
             False,
